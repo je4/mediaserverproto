@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserverdb/proto";
+option java_package = "ch.unibas.ub.mediaserver.db";
+option java_outer_classname = "DBControllerProto";
+option java_multiple_files = true;
+option objc_class_prefix = "UBB";
+option csharp_namespace = "Unibas.UB.Mediaserver.DB";
+
+package mediaserverdbproto;
+
+import "storage.proto";
+import "collection.proto";
+import "item.proto";
+import "cache.proto";
+import "defaultResponse.proto";
+import "google/protobuf/empty.proto";
+
+import "pageToken.proto";
+
+message IngestMetadata {
+  ItemIdentifier item = 1;
+  string status = 2;
+  ItemMetadata itemMetadata = 3;
+  CacheMetadata cacheMetadata = 4;
+}
+
+service DBController {
+  rpc Ping(google.protobuf.Empty) returns (DefaultResponse) {}
+  rpc GetItem(ItemIdentifier) returns (Item) {}
+  rpc GetStorage(StorageIdentifier) returns (Storage) {}
+  rpc GetCollection(CollectionIdentifier) returns (Collection) {}
+  rpc GetCollections(PageToken) returns (Collections) {}
+  rpc CreateItem(NewItem) returns (DefaultResponse) {}
+  rpc DeleteItem(ItemIdentifier) returns (DefaultResponse) {}
+  rpc GetIngestItem(google.protobuf.Empty) returns (IngestItem) {}
+  rpc SetIngestItem(IngestMetadata) returns (DefaultResponse) {}
+  rpc ExistsItem(ItemIdentifier) returns (DefaultResponse) {}
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserverdb/proto";
+option java_package = "ch.unibas.ub.mediaserver.db";
+option java_outer_classname = "CollectionProto";
+option java_multiple_files = true;
+option objc_class_prefix = "UBB";
+option csharp_namespace = "Unibas.UB.Mediaserver.DB";
+
+package mediaserverdbproto;
+
+import "pageToken.proto";
+import "storage.proto";
+
+message CollectionIdentifier {
+  string collection = 1;
+}
+
+message Collection {
+  string name = 1;
+  string description = 2;
+  string signature_prefix = 3;
+  string secret = 4;
+  string public = 5;
+  string jwtkey = 6;
+  Storage storage = 7;
+}
+
+message Collections {
+  repeated Collection collections = 1;
+  PageToken next_page_token = 2;
+}

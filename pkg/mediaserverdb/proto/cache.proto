@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserverdb/proto";
+option java_package = "ch.unibas.ub.mediaserver.db";
+option java_outer_classname = "CacheProto";
+option java_multiple_files = true;
+option objc_class_prefix = "UBB";
+option csharp_namespace = "Unibas.UB.Mediaserver.DB";
+
+package mediaserverdbproto;
+
+import "item.proto";
+
+message Cache {
+  ItemIdentifier identifier = 1;
+  CacheMetadata metadata = 2;
+}
+
+message CacheMetadata {
+  string Action = 2;
+  string Params = 3;
+  int64 Width = 4;
+  int64 Height = 5;
+  int64 Duration = 6;
+  int64 Size = 7;
+  string MimeType = 8;
+  string Path = 9;
+  optional string StorageName = 10;
+}
