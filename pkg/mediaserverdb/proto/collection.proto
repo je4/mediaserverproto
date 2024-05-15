@@ -9,8 +9,8 @@ option csharp_namespace = "Unibas.UB.Mediaserver.DB";
 
 package mediaserverdbproto;
 
-import "pageToken.proto";
 import "storage.proto";
+import "page.proto";
 
 message CollectionIdentifier {
   string collection = 1;
@@ -26,7 +26,7 @@ message Collection {
   Storage storage = 7;
 }
 
-message Collections {
+message CollectionsResponse {
   repeated Collection collections = 1;
-  PageToken next_page_token = 2;
+  genericproto.PageResponse Page = 2;
 }

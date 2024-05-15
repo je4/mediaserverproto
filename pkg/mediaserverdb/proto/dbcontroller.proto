@@ -14,9 +14,8 @@ import "collection.proto";
 import "item.proto";
 import "cache.proto";
 import "defaultResponse.proto";
+// import "page.proto";
 import "google/protobuf/empty.proto";
-
-import "pageToken.proto";
 
 message IngestMetadata {
   ItemIdentifier item = 1;
@@ -26,14 +25,14 @@ message IngestMetadata {
 }
 
 service DBController {
-  rpc Ping(google.protobuf.Empty) returns (mediaservergenericproto.DefaultResponse) {}
+  rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
   rpc GetItem(ItemIdentifier) returns (Item) {}
   rpc GetStorage(StorageIdentifier) returns (Storage) {}
   rpc GetCollection(CollectionIdentifier) returns (Collection) {}
-  rpc GetCollections(PageToken) returns (Collections) {}
-  rpc CreateItem(NewItem) returns (mediaservergenericproto.DefaultResponse) {}
-  rpc DeleteItem(ItemIdentifier) returns (mediaservergenericproto.DefaultResponse) {}
+  rpc GetCollections(google.protobuf.Empty) returns (stream Collection) {}
+  rpc CreateItem(NewItem) returns (genericproto.DefaultResponse) {}
+  rpc DeleteItem(ItemIdentifier) returns (genericproto.DefaultResponse) {}
   rpc GetIngestItem(google.protobuf.Empty) returns (IngestItem) {}
-  rpc SetIngestItem(IngestMetadata) returns (mediaservergenericproto.DefaultResponse) {}
-  rpc ExistsItem(ItemIdentifier) returns (mediaservergenericproto.DefaultResponse) {}
+  rpc SetIngestItem(IngestMetadata) returns (genericproto.DefaultResponse) {}
+  rpc ExistsItem(ItemIdentifier) returns (genericproto.DefaultResponse) {}
 }

@@ -8,7 +8,7 @@ package proto
 
 import (
 	context "context"
-	proto "github.com/je4/mediaserverproto/v2/pkg/mediaservergeneric/proto"
+	proto "github.com/je4/genericproto/v2/pkg/generic/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -41,7 +41,7 @@ type DBControllerClient interface {
 	GetItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*Item, error)
 	GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error)
 	GetCollection(ctx context.Context, in *CollectionIdentifier, opts ...grpc.CallOption) (*Collection, error)
-	GetCollections(ctx context.Context, in *PageToken, opts ...grpc.CallOption) (*Collections, error)
+	GetCollections(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (DBController_GetCollectionsClient, error)
 	CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	DeleteItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	GetIngestItem(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IngestItem, error)
@@ -93,13 +93,36 @@ func (c *dBControllerClient) GetCollection(ctx context.Context, in *CollectionId
 	return out, nil
 }
 
-func (c *dBControllerClient) GetCollections(ctx context.Context, in *PageToken, opts ...grpc.CallOption) (*Collections, error) {
-	out := new(Collections)
-	err := c.cc.Invoke(ctx, DBController_GetCollections_FullMethodName, in, out, opts...)
+func (c *dBControllerClient) GetCollections(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (DBController_GetCollectionsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &DBController_ServiceDesc.Streams[0], DBController_GetCollections_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &dBControllerGetCollectionsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type DBController_GetCollectionsClient interface {
+	Recv() (*Collection, error)
+	grpc.ClientStream
+}
+
+type dBControllerGetCollectionsClient struct {
+	grpc.ClientStream
+}
+
+func (x *dBControllerGetCollectionsClient) Recv() (*Collection, error) {
+	m := new(Collection)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *dBControllerClient) CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
@@ -155,7 +178,7 @@ type DBControllerServer interface {
 	GetItem(context.Context, *ItemIdentifier) (*Item, error)
 	GetStorage(context.Context, *StorageIdentifier) (*Storage, error)
 	GetCollection(context.Context, *CollectionIdentifier) (*Collection, error)
-	GetCollections(context.Context, *PageToken) (*Collections, error)
+	GetCollections(*emptypb.Empty, DBController_GetCollectionsServer) error
 	CreateItem(context.Context, *NewItem) (*proto.DefaultResponse, error)
 	DeleteItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error)
 	GetIngestItem(context.Context, *emptypb.Empty) (*IngestItem, error)
@@ -180,8 +203,8 @@ func (UnimplementedDBControllerServer) GetStorage(context.Context, *StorageIdent
 func (UnimplementedDBControllerServer) GetCollection(context.Context, *CollectionIdentifier) (*Collection, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCollection not implemented")
 }
-func (UnimplementedDBControllerServer) GetCollections(context.Context, *PageToken) (*Collections, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCollections not implemented")
+func (UnimplementedDBControllerServer) GetCollections(*emptypb.Empty, DBController_GetCollectionsServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetCollections not implemented")
 }
 func (UnimplementedDBControllerServer) CreateItem(context.Context, *NewItem) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateItem not implemented")
@@ -283,22 +306,25 @@ func _DBController_GetCollection_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DBController_GetCollections_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PageToken)
-	if err := dec(in); err != nil {
-		return nil, err
+func _DBController_GetCollections_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(emptypb.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	if interceptor == nil {
-		return srv.(DBControllerServer).GetCollections(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: DBController_GetCollections_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DBControllerServer).GetCollections(ctx, req.(*PageToken))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(DBControllerServer).GetCollections(m, &dBControllerGetCollectionsServer{stream})
+}
+
+type DBController_GetCollectionsServer interface {
+	Send(*Collection) error
+	grpc.ServerStream
+}
+
+type dBControllerGetCollectionsServer struct {
+	grpc.ServerStream
+}
+
+func (x *dBControllerGetCollectionsServer) Send(m *Collection) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 func _DBController_CreateItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -415,10 +441,6 @@ var DBController_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DBController_GetCollection_Handler,
 		},
 		{
-			MethodName: "GetCollections",
-			Handler:    _DBController_GetCollections_Handler,
-		},
-		{
 			MethodName: "CreateItem",
 			Handler:    _DBController_CreateItem_Handler,
 		},
@@ -439,6 +461,12 @@ var DBController_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DBController_ExistsItem_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetCollections",
+			Handler:       _DBController_GetCollections_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "dbcontroller.proto",
 }
