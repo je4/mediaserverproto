@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserveraction/proto";
+option java_package = "ch.unibas.ub.mediaserver.action";
+option java_outer_classname = "ActionProto";
+option java_multiple_files = true;
+option objc_class_prefix = "UBB";
+option csharp_namespace = "Unibas.UB.Mediaserver.Action";
+
+package mediaserveractionproto;
+
+import "defaultResponse.proto";
+import "stringlist.proto";
+import "item.proto";
+import "cache.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+message ActionParam {
+  mediaserverdbproto.ItemIdentifier item = 1;
+  string action = 2;
+  map<string, string> params = 3;
+}
+
+message ActionResponse {
+  oneof actionResponse {
+    genericproto.DefaultResponse response = 2;
+    mediaserverdbproto.Cache cache = 3;
+  }
+}
