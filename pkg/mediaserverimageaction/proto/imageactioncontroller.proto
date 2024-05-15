@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserverimageaction/proto";
+option java_package = "ch.unibas.ub.mediaserver.imageaction";
+option java_outer_classname = "ImageActionControllerProto";
+option java_multiple_files = true;
+option objc_class_prefix = "UBB";
+option csharp_namespace = "Unibas.UB.Mediaserver.ImageAction";
+
+package mediaserverimageactionproto;
+
+import "google/protobuf/empty.proto";
+import "defaultResponse.proto";
+
+service ImageActionController {
+  rpc Ping (google.protobuf.Empty) returns (mediaservergenericproto.DefaultResponse) {}
+}

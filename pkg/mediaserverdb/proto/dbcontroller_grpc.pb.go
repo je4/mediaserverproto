@@ -8,6 +8,7 @@ package proto
 
 import (
 	context "context"
+	proto "github.com/je4/mediaserverproto/v2/pkg/mediaservergeneric/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -36,16 +37,16 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DBControllerClient interface {
-	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*DefaultResponse, error)
+	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	GetItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*Item, error)
 	GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error)
 	GetCollection(ctx context.Context, in *CollectionIdentifier, opts ...grpc.CallOption) (*Collection, error)
 	GetCollections(ctx context.Context, in *PageToken, opts ...grpc.CallOption) (*Collections, error)
-	CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*DefaultResponse, error)
-	DeleteItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*DefaultResponse, error)
+	CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
+	DeleteItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	GetIngestItem(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IngestItem, error)
-	SetIngestItem(ctx context.Context, in *IngestMetadata, opts ...grpc.CallOption) (*DefaultResponse, error)
-	ExistsItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*DefaultResponse, error)
+	SetIngestItem(ctx context.Context, in *IngestMetadata, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
+	ExistsItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 }
 
 type dBControllerClient struct {
@@ -56,8 +57,8 @@ func NewDBControllerClient(cc grpc.ClientConnInterface) DBControllerClient {
 	return &dBControllerClient{cc}
 }
 
-func (c *dBControllerClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*DefaultResponse, error) {
-	out := new(DefaultResponse)
+func (c *dBControllerClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
 	err := c.cc.Invoke(ctx, DBController_Ping_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -101,8 +102,8 @@ func (c *dBControllerClient) GetCollections(ctx context.Context, in *PageToken, 
 	return out, nil
 }
 
-func (c *dBControllerClient) CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*DefaultResponse, error) {
-	out := new(DefaultResponse)
+func (c *dBControllerClient) CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
 	err := c.cc.Invoke(ctx, DBController_CreateItem_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -110,8 +111,8 @@ func (c *dBControllerClient) CreateItem(ctx context.Context, in *NewItem, opts .
 	return out, nil
 }
 
-func (c *dBControllerClient) DeleteItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*DefaultResponse, error) {
-	out := new(DefaultResponse)
+func (c *dBControllerClient) DeleteItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
 	err := c.cc.Invoke(ctx, DBController_DeleteItem_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -128,8 +129,8 @@ func (c *dBControllerClient) GetIngestItem(ctx context.Context, in *emptypb.Empt
 	return out, nil
 }
 
-func (c *dBControllerClient) SetIngestItem(ctx context.Context, in *IngestMetadata, opts ...grpc.CallOption) (*DefaultResponse, error) {
-	out := new(DefaultResponse)
+func (c *dBControllerClient) SetIngestItem(ctx context.Context, in *IngestMetadata, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
 	err := c.cc.Invoke(ctx, DBController_SetIngestItem_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -137,8 +138,8 @@ func (c *dBControllerClient) SetIngestItem(ctx context.Context, in *IngestMetada
 	return out, nil
 }
 
-func (c *dBControllerClient) ExistsItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*DefaultResponse, error) {
-	out := new(DefaultResponse)
+func (c *dBControllerClient) ExistsItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
 	err := c.cc.Invoke(ctx, DBController_ExistsItem_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -150,16 +151,16 @@ func (c *dBControllerClient) ExistsItem(ctx context.Context, in *ItemIdentifier,
 // All implementations must embed UnimplementedDBControllerServer
 // for forward compatibility
 type DBControllerServer interface {
-	Ping(context.Context, *emptypb.Empty) (*DefaultResponse, error)
+	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
 	GetItem(context.Context, *ItemIdentifier) (*Item, error)
 	GetStorage(context.Context, *StorageIdentifier) (*Storage, error)
 	GetCollection(context.Context, *CollectionIdentifier) (*Collection, error)
 	GetCollections(context.Context, *PageToken) (*Collections, error)
-	CreateItem(context.Context, *NewItem) (*DefaultResponse, error)
-	DeleteItem(context.Context, *ItemIdentifier) (*DefaultResponse, error)
+	CreateItem(context.Context, *NewItem) (*proto.DefaultResponse, error)
+	DeleteItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error)
 	GetIngestItem(context.Context, *emptypb.Empty) (*IngestItem, error)
-	SetIngestItem(context.Context, *IngestMetadata) (*DefaultResponse, error)
-	ExistsItem(context.Context, *ItemIdentifier) (*DefaultResponse, error)
+	SetIngestItem(context.Context, *IngestMetadata) (*proto.DefaultResponse, error)
+	ExistsItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error)
 	mustEmbedUnimplementedDBControllerServer()
 }
 
@@ -167,7 +168,7 @@ type DBControllerServer interface {
 type UnimplementedDBControllerServer struct {
 }
 
-func (UnimplementedDBControllerServer) Ping(context.Context, *emptypb.Empty) (*DefaultResponse, error) {
+func (UnimplementedDBControllerServer) Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
 func (UnimplementedDBControllerServer) GetItem(context.Context, *ItemIdentifier) (*Item, error) {
@@ -182,19 +183,19 @@ func (UnimplementedDBControllerServer) GetCollection(context.Context, *Collectio
 func (UnimplementedDBControllerServer) GetCollections(context.Context, *PageToken) (*Collections, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCollections not implemented")
 }
-func (UnimplementedDBControllerServer) CreateItem(context.Context, *NewItem) (*DefaultResponse, error) {
+func (UnimplementedDBControllerServer) CreateItem(context.Context, *NewItem) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateItem not implemented")
 }
-func (UnimplementedDBControllerServer) DeleteItem(context.Context, *ItemIdentifier) (*DefaultResponse, error) {
+func (UnimplementedDBControllerServer) DeleteItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteItem not implemented")
 }
 func (UnimplementedDBControllerServer) GetIngestItem(context.Context, *emptypb.Empty) (*IngestItem, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetIngestItem not implemented")
 }
-func (UnimplementedDBControllerServer) SetIngestItem(context.Context, *IngestMetadata) (*DefaultResponse, error) {
+func (UnimplementedDBControllerServer) SetIngestItem(context.Context, *IngestMetadata) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetIngestItem not implemented")
 }
-func (UnimplementedDBControllerServer) ExistsItem(context.Context, *ItemIdentifier) (*DefaultResponse, error) {
+func (UnimplementedDBControllerServer) ExistsItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExistsItem not implemented")
 }
 func (UnimplementedDBControllerServer) mustEmbedUnimplementedDBControllerServer() {}
