@@ -13,10 +13,19 @@ import "defaultResponse.proto";
 import "stringlist.proto";
 import "action.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/wrappers.proto";
 
 service ActionController {
   rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
   rpc GetParams(google.protobuf.Empty) returns (genericproto.StringList) {}
   rpc Action(ActionParam) returns (ActionResponse) {}
+}
+
+message DispatcherDefaultResponse {
+  genericproto.DefaultResponse response = 1;
+  int64 nextCallWait = 4;
+}
+
+service ActionDispatcher {
+  rpc AddController(ActionDispatcherParam) returns (DispatcherDefaultResponse) {}
+  rpc RemoveController(ActionDispatcherParam) returns (genericproto.DefaultResponse) {}
 }

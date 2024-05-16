@@ -183,3 +183,130 @@ var ActionController_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "actioncontroller.proto",
 }
+
+const (
+	ActionDispatcher_AddController_FullMethodName    = "/mediaserveractionproto.ActionDispatcher/AddController"
+	ActionDispatcher_RemoveController_FullMethodName = "/mediaserveractionproto.ActionDispatcher/RemoveController"
+)
+
+// ActionDispatcherClient is the client API for ActionDispatcher service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ActionDispatcherClient interface {
+	AddController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*DispatcherDefaultResponse, error)
+	RemoveController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
+}
+
+type actionDispatcherClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewActionDispatcherClient(cc grpc.ClientConnInterface) ActionDispatcherClient {
+	return &actionDispatcherClient{cc}
+}
+
+func (c *actionDispatcherClient) AddController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*DispatcherDefaultResponse, error) {
+	out := new(DispatcherDefaultResponse)
+	err := c.cc.Invoke(ctx, ActionDispatcher_AddController_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *actionDispatcherClient) RemoveController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
+	err := c.cc.Invoke(ctx, ActionDispatcher_RemoveController_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ActionDispatcherServer is the server API for ActionDispatcher service.
+// All implementations must embed UnimplementedActionDispatcherServer
+// for forward compatibility
+type ActionDispatcherServer interface {
+	AddController(context.Context, *ActionDispatcherParam) (*DispatcherDefaultResponse, error)
+	RemoveController(context.Context, *ActionDispatcherParam) (*proto.DefaultResponse, error)
+	mustEmbedUnimplementedActionDispatcherServer()
+}
+
+// UnimplementedActionDispatcherServer must be embedded to have forward compatible implementations.
+type UnimplementedActionDispatcherServer struct {
+}
+
+func (UnimplementedActionDispatcherServer) AddController(context.Context, *ActionDispatcherParam) (*DispatcherDefaultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddController not implemented")
+}
+func (UnimplementedActionDispatcherServer) RemoveController(context.Context, *ActionDispatcherParam) (*proto.DefaultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveController not implemented")
+}
+func (UnimplementedActionDispatcherServer) mustEmbedUnimplementedActionDispatcherServer() {}
+
+// UnsafeActionDispatcherServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ActionDispatcherServer will
+// result in compilation errors.
+type UnsafeActionDispatcherServer interface {
+	mustEmbedUnimplementedActionDispatcherServer()
+}
+
+func RegisterActionDispatcherServer(s grpc.ServiceRegistrar, srv ActionDispatcherServer) {
+	s.RegisterService(&ActionDispatcher_ServiceDesc, srv)
+}
+
+func _ActionDispatcher_AddController_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActionDispatcherParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionDispatcherServer).AddController(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ActionDispatcher_AddController_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionDispatcherServer).AddController(ctx, req.(*ActionDispatcherParam))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ActionDispatcher_RemoveController_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActionDispatcherParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionDispatcherServer).RemoveController(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ActionDispatcher_RemoveController_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionDispatcherServer).RemoveController(ctx, req.(*ActionDispatcherParam))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ActionDispatcher_ServiceDesc is the grpc.ServiceDesc for ActionDispatcher service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ActionDispatcher_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "mediaserveractionproto.ActionDispatcher",
+	HandlerType: (*ActionDispatcherServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddController",
+			Handler:    _ActionDispatcher_AddController_Handler,
+		},
+		{
+			MethodName: "RemoveController",
+			Handler:    _ActionDispatcher_RemoveController_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "actioncontroller.proto",
+}
