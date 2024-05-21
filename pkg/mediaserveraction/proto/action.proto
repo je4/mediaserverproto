@@ -28,7 +28,8 @@ message ActionResponse {
 
 message ActionDispatcherParam {
   string type = 1;
-  string action = 2;
+  repeated string action = 2;
   optional string host = 3;
   uint32 port = 4;
+  uint32 concurrency = 5;
 }
