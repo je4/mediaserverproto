@@ -185,6 +185,7 @@ var ActionController_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
+	ActionDispatcher_Ping_FullMethodName             = "/mediaserveractionproto.ActionDispatcher/Ping"
 	ActionDispatcher_AddController_FullMethodName    = "/mediaserveractionproto.ActionDispatcher/AddController"
 	ActionDispatcher_RemoveController_FullMethodName = "/mediaserveractionproto.ActionDispatcher/RemoveController"
 )
@@ -193,6 +194,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ActionDispatcherClient interface {
+	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	AddController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*DispatcherDefaultResponse, error)
 	RemoveController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 }
@@ -203,6 +205,15 @@ type actionDispatcherClient struct {
 
 func NewActionDispatcherClient(cc grpc.ClientConnInterface) ActionDispatcherClient {
 	return &actionDispatcherClient{cc}
+}
+
+func (c *actionDispatcherClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
+	err := c.cc.Invoke(ctx, ActionDispatcher_Ping_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *actionDispatcherClient) AddController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*DispatcherDefaultResponse, error) {
@@ -227,6 +238,7 @@ func (c *actionDispatcherClient) RemoveController(ctx context.Context, in *Actio
 // All implementations must embed UnimplementedActionDispatcherServer
 // for forward compatibility
 type ActionDispatcherServer interface {
+	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
 	AddController(context.Context, *ActionDispatcherParam) (*DispatcherDefaultResponse, error)
 	RemoveController(context.Context, *ActionDispatcherParam) (*proto.DefaultResponse, error)
 	mustEmbedUnimplementedActionDispatcherServer()
@@ -236,6 +248,9 @@ type ActionDispatcherServer interface {
 type UnimplementedActionDispatcherServer struct {
 }
 
+func (UnimplementedActionDispatcherServer) Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
 func (UnimplementedActionDispatcherServer) AddController(context.Context, *ActionDispatcherParam) (*DispatcherDefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddController not implemented")
 }
@@ -253,6 +268,24 @@ type UnsafeActionDispatcherServer interface {
 
 func RegisterActionDispatcherServer(s grpc.ServiceRegistrar, srv ActionDispatcherServer) {
 	s.RegisterService(&ActionDispatcher_ServiceDesc, srv)
+}
+
+func _ActionDispatcher_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionDispatcherServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ActionDispatcher_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionDispatcherServer).Ping(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _ActionDispatcher_AddController_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -298,6 +331,10 @@ var ActionDispatcher_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "mediaserveractionproto.ActionDispatcher",
 	HandlerType: (*ActionDispatcherServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Ping",
+			Handler:    _ActionDispatcher_Ping_Handler,
+		},
 		{
 			MethodName: "AddController",
 			Handler:    _ActionDispatcher_AddController_Handler,
