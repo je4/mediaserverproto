@@ -26,6 +26,7 @@ message DispatcherDefaultResponse {
 }
 
 service ActionDispatcher {
+  rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
   rpc AddController(ActionDispatcherParam) returns (DispatcherDefaultResponse) {}
   rpc RemoveController(ActionDispatcherParam) returns (genericproto.DefaultResponse) {}
 }
