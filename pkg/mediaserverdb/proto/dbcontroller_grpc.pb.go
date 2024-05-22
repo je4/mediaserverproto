@@ -31,6 +31,7 @@ const (
 	DBController_GetIngestItem_FullMethodName  = "/mediaserverdbproto.DBController/GetIngestItem"
 	DBController_SetIngestItem_FullMethodName  = "/mediaserverdbproto.DBController/SetIngestItem"
 	DBController_ExistsItem_FullMethodName     = "/mediaserverdbproto.DBController/ExistsItem"
+	DBController_SetCache_FullMethodName       = "/mediaserverdbproto.DBController/SetCache"
 )
 
 // DBControllerClient is the client API for DBController service.
@@ -47,6 +48,7 @@ type DBControllerClient interface {
 	GetIngestItem(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IngestItem, error)
 	SetIngestItem(ctx context.Context, in *IngestMetadata, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	ExistsItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
+	SetCache(ctx context.Context, in *Cache, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 }
 
 type dBControllerClient struct {
@@ -170,6 +172,15 @@ func (c *dBControllerClient) ExistsItem(ctx context.Context, in *ItemIdentifier,
 	return out, nil
 }
 
+func (c *dBControllerClient) SetCache(ctx context.Context, in *Cache, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
+	err := c.cc.Invoke(ctx, DBController_SetCache_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DBControllerServer is the server API for DBController service.
 // All implementations must embed UnimplementedDBControllerServer
 // for forward compatibility
@@ -184,6 +195,7 @@ type DBControllerServer interface {
 	GetIngestItem(context.Context, *emptypb.Empty) (*IngestItem, error)
 	SetIngestItem(context.Context, *IngestMetadata) (*proto.DefaultResponse, error)
 	ExistsItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error)
+	SetCache(context.Context, *Cache) (*proto.DefaultResponse, error)
 	mustEmbedUnimplementedDBControllerServer()
 }
 
@@ -220,6 +232,9 @@ func (UnimplementedDBControllerServer) SetIngestItem(context.Context, *IngestMet
 }
 func (UnimplementedDBControllerServer) ExistsItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExistsItem not implemented")
+}
+func (UnimplementedDBControllerServer) SetCache(context.Context, *Cache) (*proto.DefaultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetCache not implemented")
 }
 func (UnimplementedDBControllerServer) mustEmbedUnimplementedDBControllerServer() {}
 
@@ -417,6 +432,24 @@ func _DBController_ExistsItem_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DBController_SetCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Cache)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DBControllerServer).SetCache(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DBController_SetCache_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DBControllerServer).SetCache(ctx, req.(*Cache))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DBController_ServiceDesc is the grpc.ServiceDesc for DBController service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -459,6 +492,10 @@ var DBController_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ExistsItem",
 			Handler:    _DBController_ExistsItem_Handler,
+		},
+		{
+			MethodName: "SetCache",
+			Handler:    _DBController_SetCache_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
