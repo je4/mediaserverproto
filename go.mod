@@ -4,9 +4,9 @@ go 1.22.2
 
 require (
 	emperror.dev/errors v0.8.1
+	github.com/je4/genericproto/v2 v2.0.2
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.34.1
-	github.com/je4/mediaserverproto/v2 v2.0.2
 )
 
 require (
