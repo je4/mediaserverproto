@@ -31,7 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ActionControllerClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
-	GetParams(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.StringList, error)
+	GetParams(ctx context.Context, in *ParamsParam, opts ...grpc.CallOption) (*proto.StringList, error)
 	Action(ctx context.Context, in *ActionParam, opts ...grpc.CallOption) (*ActionResponse, error)
 }
 
@@ -52,7 +52,7 @@ func (c *actionControllerClient) Ping(ctx context.Context, in *emptypb.Empty, op
 	return out, nil
 }
 
-func (c *actionControllerClient) GetParams(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.StringList, error) {
+func (c *actionControllerClient) GetParams(ctx context.Context, in *ParamsParam, opts ...grpc.CallOption) (*proto.StringList, error) {
 	out := new(proto.StringList)
 	err := c.cc.Invoke(ctx, ActionController_GetParams_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -75,7 +75,7 @@ func (c *actionControllerClient) Action(ctx context.Context, in *ActionParam, op
 // for forward compatibility
 type ActionControllerServer interface {
 	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
-	GetParams(context.Context, *emptypb.Empty) (*proto.StringList, error)
+	GetParams(context.Context, *ParamsParam) (*proto.StringList, error)
 	Action(context.Context, *ActionParam) (*ActionResponse, error)
 	mustEmbedUnimplementedActionControllerServer()
 }
@@ -87,7 +87,7 @@ type UnimplementedActionControllerServer struct {
 func (UnimplementedActionControllerServer) Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedActionControllerServer) GetParams(context.Context, *emptypb.Empty) (*proto.StringList, error) {
+func (UnimplementedActionControllerServer) GetParams(context.Context, *ParamsParam) (*proto.StringList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetParams not implemented")
 }
 func (UnimplementedActionControllerServer) Action(context.Context, *ActionParam) (*ActionResponse, error) {
@@ -125,7 +125,7 @@ func _ActionController_Ping_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _ActionController_GetParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(ParamsParam)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func _ActionController_GetParams_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: ActionController_GetParams_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActionControllerServer).GetParams(ctx, req.(*emptypb.Empty))
+		return srv.(ActionControllerServer).GetParams(ctx, req.(*ParamsParam))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -19,6 +19,12 @@ message ActionParam {
   map<string, string> params = 3;
 }
 
+message ParamsParam {
+  mediaserverdbproto.ItemIdentifier item = 1;
+  string action = 2;
+}
+
+
 message ActionResponse {
   oneof actionResponse {
     genericproto.DefaultResponse response = 2;
