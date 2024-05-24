@@ -16,6 +16,12 @@ message Cache {
   CacheMetadata metadata = 2;
 }
 
+message CacheRequest {
+  ItemIdentifier identifier = 1;
+  string Action = 2;
+  string Params = 3;
+}
+
 message CacheMetadata {
   string Action = 2;
   string Params = 3;

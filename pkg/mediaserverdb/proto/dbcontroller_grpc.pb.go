@@ -24,6 +24,7 @@ const (
 	DBController_Ping_FullMethodName           = "/mediaserverdbproto.DBController/Ping"
 	DBController_GetItem_FullMethodName        = "/mediaserverdbproto.DBController/GetItem"
 	DBController_GetStorage_FullMethodName     = "/mediaserverdbproto.DBController/GetStorage"
+	DBController_GetCache_FullMethodName       = "/mediaserverdbproto.DBController/GetCache"
 	DBController_GetCollection_FullMethodName  = "/mediaserverdbproto.DBController/GetCollection"
 	DBController_GetCollections_FullMethodName = "/mediaserverdbproto.DBController/GetCollections"
 	DBController_CreateItem_FullMethodName     = "/mediaserverdbproto.DBController/CreateItem"
@@ -41,6 +42,7 @@ type DBControllerClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	GetItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*Item, error)
 	GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error)
+	GetCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*Cache, error)
 	GetCollection(ctx context.Context, in *CollectionIdentifier, opts ...grpc.CallOption) (*Collection, error)
 	GetCollections(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (DBController_GetCollectionsClient, error)
 	CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
@@ -80,6 +82,15 @@ func (c *dBControllerClient) GetItem(ctx context.Context, in *ItemIdentifier, op
 func (c *dBControllerClient) GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error) {
 	out := new(Storage)
 	err := c.cc.Invoke(ctx, DBController_GetStorage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dBControllerClient) GetCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*Cache, error) {
+	out := new(Cache)
+	err := c.cc.Invoke(ctx, DBController_GetCache_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -188,6 +199,7 @@ type DBControllerServer interface {
 	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
 	GetItem(context.Context, *ItemIdentifier) (*Item, error)
 	GetStorage(context.Context, *StorageIdentifier) (*Storage, error)
+	GetCache(context.Context, *CacheRequest) (*Cache, error)
 	GetCollection(context.Context, *CollectionIdentifier) (*Collection, error)
 	GetCollections(*emptypb.Empty, DBController_GetCollectionsServer) error
 	CreateItem(context.Context, *NewItem) (*proto.DefaultResponse, error)
@@ -211,6 +223,9 @@ func (UnimplementedDBControllerServer) GetItem(context.Context, *ItemIdentifier)
 }
 func (UnimplementedDBControllerServer) GetStorage(context.Context, *StorageIdentifier) (*Storage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStorage not implemented")
+}
+func (UnimplementedDBControllerServer) GetCache(context.Context, *CacheRequest) (*Cache, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCache not implemented")
 }
 func (UnimplementedDBControllerServer) GetCollection(context.Context, *CollectionIdentifier) (*Collection, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCollection not implemented")
@@ -299,6 +314,24 @@ func _DBController_GetStorage_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DBControllerServer).GetStorage(ctx, req.(*StorageIdentifier))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DBController_GetCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CacheRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DBControllerServer).GetCache(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DBController_GetCache_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DBControllerServer).GetCache(ctx, req.(*CacheRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -468,6 +501,10 @@ var DBController_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStorage",
 			Handler:    _DBController_GetStorage_Handler,
+		},
+		{
+			MethodName: "GetCache",
+			Handler:    _DBController_GetCache_Handler,
 		},
 		{
 			MethodName: "GetCollection",
