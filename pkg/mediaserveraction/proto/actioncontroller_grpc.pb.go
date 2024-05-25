@@ -9,6 +9,7 @@ package proto
 import (
 	context "context"
 	proto "github.com/je4/genericproto/v2/pkg/generic/proto"
+	proto1 "github.com/je4/mediaserverproto/v2/pkg/mediaserverdb/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -32,7 +33,7 @@ const (
 type ActionControllerClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	GetParams(ctx context.Context, in *ParamsParam, opts ...grpc.CallOption) (*proto.StringList, error)
-	Action(ctx context.Context, in *ActionParam, opts ...grpc.CallOption) (*ActionResponse, error)
+	Action(ctx context.Context, in *ActionParam, opts ...grpc.CallOption) (*proto1.Cache, error)
 }
 
 type actionControllerClient struct {
@@ -61,8 +62,8 @@ func (c *actionControllerClient) GetParams(ctx context.Context, in *ParamsParam,
 	return out, nil
 }
 
-func (c *actionControllerClient) Action(ctx context.Context, in *ActionParam, opts ...grpc.CallOption) (*ActionResponse, error) {
-	out := new(ActionResponse)
+func (c *actionControllerClient) Action(ctx context.Context, in *ActionParam, opts ...grpc.CallOption) (*proto1.Cache, error) {
+	out := new(proto1.Cache)
 	err := c.cc.Invoke(ctx, ActionController_Action_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,7 +77,7 @@ func (c *actionControllerClient) Action(ctx context.Context, in *ActionParam, op
 type ActionControllerServer interface {
 	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
 	GetParams(context.Context, *ParamsParam) (*proto.StringList, error)
-	Action(context.Context, *ActionParam) (*ActionResponse, error)
+	Action(context.Context, *ActionParam) (*proto1.Cache, error)
 	mustEmbedUnimplementedActionControllerServer()
 }
 
@@ -90,7 +91,7 @@ func (UnimplementedActionControllerServer) Ping(context.Context, *emptypb.Empty)
 func (UnimplementedActionControllerServer) GetParams(context.Context, *ParamsParam) (*proto.StringList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetParams not implemented")
 }
-func (UnimplementedActionControllerServer) Action(context.Context, *ActionParam) (*ActionResponse, error) {
+func (UnimplementedActionControllerServer) Action(context.Context, *ActionParam) (*proto1.Cache, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Action not implemented")
 }
 func (UnimplementedActionControllerServer) mustEmbedUnimplementedActionControllerServer() {}
