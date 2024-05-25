@@ -12,11 +12,13 @@ package mediaserveractionproto;
 import "defaultResponse.proto";
 import "item.proto";
 import "cache.proto";
+import "storage.proto";
 
 message ActionParam {
-  mediaserverdbproto.ItemIdentifier item = 1;
+  mediaserverdbproto.Item item = 1;
   string action = 2;
   map<string, string> params = 3;
+  mediaserverdbproto.Storage storage = 4;
 }
 
 message ParamsParam {
