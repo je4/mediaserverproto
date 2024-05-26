@@ -10,6 +10,7 @@ option csharp_namespace = "Unibas.UB.Mediaserver.DB";
 package mediaserverdbproto;
 
 import "item.proto";
+import "storage.proto";
 
 message Cache {
   ItemIdentifier identifier = 1;
@@ -31,5 +32,5 @@ message CacheMetadata {
   int64 Size = 7;
   string MimeType = 8;
   string Path = 9;
-  optional string StorageName = 10;
+  optional Storage Storage = 10;
 }
