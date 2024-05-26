@@ -35,7 +35,6 @@ message NewItem {
 message IngestItem {
   ItemIdentifier identifier = 1;
   string urn = 2;
-  optional string error = 3;
   IngestType ingestType = 4;
   Collection collection = 5;
 }
@@ -46,7 +45,6 @@ message ItemMetadata {
   optional string objecttype = 5;
   optional string mimetype = 6;
   optional string sha512 = 8;
-  //optional string metadata = 9;
 }
 
 message Item {
