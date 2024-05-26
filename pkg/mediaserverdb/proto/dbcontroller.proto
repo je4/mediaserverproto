@@ -16,6 +16,7 @@ import "cache.proto";
 import "defaultResponse.proto";
 // import "page.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 
 message IngestMetadata {
   ItemIdentifier item = 1;
@@ -27,6 +28,7 @@ message IngestMetadata {
 service DBController {
   rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
   rpc GetItem(ItemIdentifier) returns (Item) {}
+  rpc GetItemMetadata(ItemIdentifier) returns (google.protobuf.StringValue) {}
   rpc GetStorage(StorageIdentifier) returns (Storage) {}
   rpc GetCache(CacheRequest) returns (Cache) {}
   rpc GetCollection(CollectionIdentifier) returns (Collection) {}

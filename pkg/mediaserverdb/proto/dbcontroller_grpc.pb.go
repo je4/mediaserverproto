@@ -13,6 +13,7 @@ import (
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
+	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,18 +22,19 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	DBController_Ping_FullMethodName           = "/mediaserverdbproto.DBController/Ping"
-	DBController_GetItem_FullMethodName        = "/mediaserverdbproto.DBController/GetItem"
-	DBController_GetStorage_FullMethodName     = "/mediaserverdbproto.DBController/GetStorage"
-	DBController_GetCache_FullMethodName       = "/mediaserverdbproto.DBController/GetCache"
-	DBController_GetCollection_FullMethodName  = "/mediaserverdbproto.DBController/GetCollection"
-	DBController_GetCollections_FullMethodName = "/mediaserverdbproto.DBController/GetCollections"
-	DBController_CreateItem_FullMethodName     = "/mediaserverdbproto.DBController/CreateItem"
-	DBController_DeleteItem_FullMethodName     = "/mediaserverdbproto.DBController/DeleteItem"
-	DBController_GetIngestItem_FullMethodName  = "/mediaserverdbproto.DBController/GetIngestItem"
-	DBController_SetIngestItem_FullMethodName  = "/mediaserverdbproto.DBController/SetIngestItem"
-	DBController_ExistsItem_FullMethodName     = "/mediaserverdbproto.DBController/ExistsItem"
-	DBController_InsertCache_FullMethodName    = "/mediaserverdbproto.DBController/InsertCache"
+	DBController_Ping_FullMethodName            = "/mediaserverdbproto.DBController/Ping"
+	DBController_GetItem_FullMethodName         = "/mediaserverdbproto.DBController/GetItem"
+	DBController_GetItemMetadata_FullMethodName = "/mediaserverdbproto.DBController/GetItemMetadata"
+	DBController_GetStorage_FullMethodName      = "/mediaserverdbproto.DBController/GetStorage"
+	DBController_GetCache_FullMethodName        = "/mediaserverdbproto.DBController/GetCache"
+	DBController_GetCollection_FullMethodName   = "/mediaserverdbproto.DBController/GetCollection"
+	DBController_GetCollections_FullMethodName  = "/mediaserverdbproto.DBController/GetCollections"
+	DBController_CreateItem_FullMethodName      = "/mediaserverdbproto.DBController/CreateItem"
+	DBController_DeleteItem_FullMethodName      = "/mediaserverdbproto.DBController/DeleteItem"
+	DBController_GetIngestItem_FullMethodName   = "/mediaserverdbproto.DBController/GetIngestItem"
+	DBController_SetIngestItem_FullMethodName   = "/mediaserverdbproto.DBController/SetIngestItem"
+	DBController_ExistsItem_FullMethodName      = "/mediaserverdbproto.DBController/ExistsItem"
+	DBController_InsertCache_FullMethodName     = "/mediaserverdbproto.DBController/InsertCache"
 )
 
 // DBControllerClient is the client API for DBController service.
@@ -41,6 +43,7 @@ const (
 type DBControllerClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	GetItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*Item, error)
+	GetItemMetadata(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error)
 	GetCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*Cache, error)
 	GetCollection(ctx context.Context, in *CollectionIdentifier, opts ...grpc.CallOption) (*Collection, error)
@@ -73,6 +76,15 @@ func (c *dBControllerClient) Ping(ctx context.Context, in *emptypb.Empty, opts .
 func (c *dBControllerClient) GetItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*Item, error) {
 	out := new(Item)
 	err := c.cc.Invoke(ctx, DBController_GetItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dBControllerClient) GetItemMetadata(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
+	out := new(wrapperspb.StringValue)
+	err := c.cc.Invoke(ctx, DBController_GetItemMetadata_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -198,6 +210,7 @@ func (c *dBControllerClient) InsertCache(ctx context.Context, in *Cache, opts ..
 type DBControllerServer interface {
 	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
 	GetItem(context.Context, *ItemIdentifier) (*Item, error)
+	GetItemMetadata(context.Context, *ItemIdentifier) (*wrapperspb.StringValue, error)
 	GetStorage(context.Context, *StorageIdentifier) (*Storage, error)
 	GetCache(context.Context, *CacheRequest) (*Cache, error)
 	GetCollection(context.Context, *CollectionIdentifier) (*Collection, error)
@@ -220,6 +233,9 @@ func (UnimplementedDBControllerServer) Ping(context.Context, *emptypb.Empty) (*p
 }
 func (UnimplementedDBControllerServer) GetItem(context.Context, *ItemIdentifier) (*Item, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetItem not implemented")
+}
+func (UnimplementedDBControllerServer) GetItemMetadata(context.Context, *ItemIdentifier) (*wrapperspb.StringValue, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetItemMetadata not implemented")
 }
 func (UnimplementedDBControllerServer) GetStorage(context.Context, *StorageIdentifier) (*Storage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStorage not implemented")
@@ -296,6 +312,24 @@ func _DBController_GetItem_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DBControllerServer).GetItem(ctx, req.(*ItemIdentifier))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DBController_GetItemMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ItemIdentifier)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DBControllerServer).GetItemMetadata(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DBController_GetItemMetadata_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DBControllerServer).GetItemMetadata(ctx, req.(*ItemIdentifier))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -497,6 +531,10 @@ var DBController_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetItem",
 			Handler:    _DBController_GetItem_Handler,
+		},
+		{
+			MethodName: "GetItemMetadata",
+			Handler:    _DBController_GetItemMetadata_Handler,
 		},
 		{
 			MethodName: "GetStorage",
