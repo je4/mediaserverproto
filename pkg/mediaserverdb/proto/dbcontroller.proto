@@ -23,6 +23,7 @@ message IngestMetadata {
   string status = 2;
   ItemMetadata itemMetadata = 3;
   CacheMetadata cacheMetadata = 4;
+  string fullMetadata = 5;
 }
 
 service DBController {
