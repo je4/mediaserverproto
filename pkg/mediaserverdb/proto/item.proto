@@ -46,7 +46,7 @@ message ItemMetadata {
   optional string mimetype = 6;
   optional string error = 7;
   optional string sha512 = 8;
-  optional bytes metadata = 9;
+  optional string metadata = 9;
 }
 
 message Item {

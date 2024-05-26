@@ -36,5 +36,5 @@ service DBController {
   rpc GetIngestItem(google.protobuf.Empty) returns (IngestItem) {}
   rpc SetIngestItem(IngestMetadata) returns (genericproto.DefaultResponse) {}
   rpc ExistsItem(ItemIdentifier) returns (genericproto.DefaultResponse) {}
-  rpc SetCache(Cache) returns (genericproto.DefaultResponse) {}
+  rpc InsertCache(Cache) returns (genericproto.DefaultResponse) {}
 }
