@@ -52,12 +52,13 @@ message ItemMetadata {
 message Item {
   ItemIdentifier identifier = 1;
   string urn = 2;
-  google.protobuf.Timestamp created = 10;
-  google.protobuf.Timestamp updated = 11;
-  bool disabled = 12;
-  bool public = 13;
-  optional bytes publicActions = 14;
-  string status = 16;
-  ItemMetadata metadata = 18;
-  optional ItemIdentifier parent = 17;
+  string error = 3;
+  google.protobuf.Timestamp created = 4;
+  google.protobuf.Timestamp updated = 5;
+  bool disabled = 6;
+  bool public = 7;
+  optional bytes publicActions = 8;
+  string status = 9;
+  ItemMetadata metadata = 10;
+  optional ItemIdentifier parent = 11;
 }
