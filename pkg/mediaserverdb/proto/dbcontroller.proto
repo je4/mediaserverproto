@@ -33,6 +33,7 @@ service DBController {
   rpc GetItemMetadata(ItemIdentifier) returns (google.protobuf.StringValue) {}
   rpc GetStorage(StorageIdentifier) returns (Storage) {}
   rpc GetCache(CacheRequest) returns (Cache) {}
+  rpc DeleteCache(CacheRequest) returns (genericproto.DefaultResponse) {}
   rpc GetCollection(CollectionIdentifier) returns (Collection) {}
   rpc GetCollections(google.protobuf.Empty) returns (stream Collection) {}
   rpc CreateItem(NewItem) returns (genericproto.DefaultResponse) {}
