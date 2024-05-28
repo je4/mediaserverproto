@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserver/proto";
+option java_package = "ch.unibas.ub.mediaserver";
+option java_outer_classname = "DatabaseServiceProto";
+option java_multiple_files = true;
+option objc_class_prefix = "UBB";
+option csharp_namespace = "Unibas.UB.Mediaserver";
+
+package mediaserverproto;
+
+
+import "item.proto";
+import "cache.proto";
+import "defaultResponse.proto";
+import "google/protobuf/empty.proto";
+
+service Deleter {
+  rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
+  rpc DeleteItem(ItemIdentifier) returns (genericproto.DefaultResponse) {}
+  rpc DeleteItemCaches(ItemIdentifier) returns (genericproto.DefaultResponse) {}
+  rpc DeleteCache(CacheRequest) returns (genericproto.DefaultResponse) {}
+}

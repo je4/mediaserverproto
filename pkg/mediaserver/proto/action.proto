@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserveraction/proto";
-option java_package = "ch.unibas.ub.mediaserver.action";
-option java_outer_classname = "ActionProto";
+option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserver/proto";
+option java_package = "ch.unibas.ub.mediaserver";
+option java_outer_classname = "DatabaseServiceProto";
 option java_multiple_files = true;
 option objc_class_prefix = "UBB";
-option csharp_namespace = "Unibas.UB.Mediaserver.Action";
+option csharp_namespace = "Unibas.UB.Mediaserver";
 
-package mediaserveractionproto;
+package mediaserverproto;
 
 import "defaultResponse.proto";
 import "item.proto";
@@ -15,10 +15,10 @@ import "cache.proto";
 import "storage.proto";
 
 message ActionParam {
-  mediaserverdbproto.Item item = 1;
+  Item item = 1;
   string action = 2;
   map<string, string> params = 3;
-  mediaserverdbproto.Storage storage = 4;
+  Storage storage = 4;
 }
 
 message ParamsParam {
@@ -30,7 +30,7 @@ message ParamsParam {
 message ActionResponse {
   oneof actionResponse {
     genericproto.DefaultResponse response = 2;
-    mediaserverdbproto.Cache cache = 3;
+    Cache cache = 3;
   }
 }
 

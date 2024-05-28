@@ -3,14 +3,14 @@ package client
 import (
 	"crypto/tls"
 	"emperror.dev/errors"
-	pb "github.com/je4/mediaserverproto/v2/pkg/mediaserveraction/proto"
+	pb "github.com/je4/mediaserverproto/v2/pkg/mediaserver/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"io"
 )
 
-func CreateDispatcherClient(serverAddr string, tlsConfig *tls.Config, opts ...grpc.DialOption) (pb.ActionDispatcherClient, io.Closer, error) {
+func NewActionDispatcherClient(serverAddr string, tlsConfig *tls.Config, opts ...grpc.DialOption) (pb.ActionDispatcherClient, io.Closer, error) {
 	if tlsConfig != nil {
 		opts = append(opts, grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)))
 	} else {
@@ -25,7 +25,7 @@ func CreateDispatcherClient(serverAddr string, tlsConfig *tls.Config, opts ...gr
 	return client, conn, nil
 }
 
-func CreateControllerClient(serverAddr string, tlsConfig *tls.Config, opts ...grpc.DialOption) (pb.ActionControllerClient, io.Closer, error) {
+func NewActionClient(serverAddr string, tlsConfig *tls.Config, opts ...grpc.DialOption) (pb.ActionClient, io.Closer, error) {
 	if tlsConfig != nil {
 		opts = append(opts, grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)))
 	} else {
@@ -36,6 +36,6 @@ func CreateControllerClient(serverAddr string, tlsConfig *tls.Config, opts ...gr
 		return nil, nil, errors.Wrapf(err, "cannot connect to %s", serverAddr)
 	}
 
-	client := pb.NewActionControllerClient(conn)
+	client := pb.NewActionClient(conn)
 	return client, conn, nil
 }

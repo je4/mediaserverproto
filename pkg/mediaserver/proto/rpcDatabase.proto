@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserverdb/proto";
-option java_package = "ch.unibas.ub.mediaserver.db";
-option java_outer_classname = "DBControllerProto";
+option go_package = "github.com/je4/mediaserverproto/v2/pkg/mediaserver/proto";
+option java_package = "ch.unibas.ub.mediaserver";
+option java_outer_classname = "DatabaseServiceProto";
 option java_multiple_files = true;
 option objc_class_prefix = "UBB";
-option csharp_namespace = "Unibas.UB.Mediaserver.DB";
+option csharp_namespace = "Unibas.UB.Mediaserver";
 
-package mediaserverdbproto;
+package mediaserverproto;
 
 import "storage.proto";
 import "collection.proto";
@@ -27,7 +27,7 @@ message IngestMetadata {
   optional string error = 6;
 }
 
-service DBController {
+service Database {
   rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
   rpc GetItem(ItemIdentifier) returns (Item) {}
   rpc GetItemMetadata(ItemIdentifier) returns (google.protobuf.StringValue) {}
