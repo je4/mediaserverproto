@@ -188,6 +188,7 @@ const (
 	ActionDispatcher_Ping_FullMethodName             = "/mediaserverproto.ActionDispatcher/Ping"
 	ActionDispatcher_AddController_FullMethodName    = "/mediaserverproto.ActionDispatcher/AddController"
 	ActionDispatcher_RemoveController_FullMethodName = "/mediaserverproto.ActionDispatcher/RemoveController"
+	ActionDispatcher_GetActions_FullMethodName       = "/mediaserverproto.ActionDispatcher/GetActions"
 )
 
 // ActionDispatcherClient is the client API for ActionDispatcher service.
@@ -195,8 +196,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ActionDispatcherClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
-	AddController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*DispatcherDefaultResponse, error)
+	AddController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*ActionDispatcherDefaultResponse, error)
 	RemoveController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
+	GetActions(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ActionMap, error)
 }
 
 type actionDispatcherClient struct {
@@ -216,8 +218,8 @@ func (c *actionDispatcherClient) Ping(ctx context.Context, in *emptypb.Empty, op
 	return out, nil
 }
 
-func (c *actionDispatcherClient) AddController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*DispatcherDefaultResponse, error) {
-	out := new(DispatcherDefaultResponse)
+func (c *actionDispatcherClient) AddController(ctx context.Context, in *ActionDispatcherParam, opts ...grpc.CallOption) (*ActionDispatcherDefaultResponse, error) {
+	out := new(ActionDispatcherDefaultResponse)
 	err := c.cc.Invoke(ctx, ActionDispatcher_AddController_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -234,13 +236,23 @@ func (c *actionDispatcherClient) RemoveController(ctx context.Context, in *Actio
 	return out, nil
 }
 
+func (c *actionDispatcherClient) GetActions(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ActionMap, error) {
+	out := new(ActionMap)
+	err := c.cc.Invoke(ctx, ActionDispatcher_GetActions_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ActionDispatcherServer is the server API for ActionDispatcher service.
 // All implementations must embed UnimplementedActionDispatcherServer
 // for forward compatibility
 type ActionDispatcherServer interface {
 	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
-	AddController(context.Context, *ActionDispatcherParam) (*DispatcherDefaultResponse, error)
+	AddController(context.Context, *ActionDispatcherParam) (*ActionDispatcherDefaultResponse, error)
 	RemoveController(context.Context, *ActionDispatcherParam) (*proto.DefaultResponse, error)
+	GetActions(context.Context, *emptypb.Empty) (*ActionMap, error)
 	mustEmbedUnimplementedActionDispatcherServer()
 }
 
@@ -251,11 +263,14 @@ type UnimplementedActionDispatcherServer struct {
 func (UnimplementedActionDispatcherServer) Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedActionDispatcherServer) AddController(context.Context, *ActionDispatcherParam) (*DispatcherDefaultResponse, error) {
+func (UnimplementedActionDispatcherServer) AddController(context.Context, *ActionDispatcherParam) (*ActionDispatcherDefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddController not implemented")
 }
 func (UnimplementedActionDispatcherServer) RemoveController(context.Context, *ActionDispatcherParam) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveController not implemented")
+}
+func (UnimplementedActionDispatcherServer) GetActions(context.Context, *emptypb.Empty) (*ActionMap, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActions not implemented")
 }
 func (UnimplementedActionDispatcherServer) mustEmbedUnimplementedActionDispatcherServer() {}
 
@@ -324,6 +339,24 @@ func _ActionDispatcher_RemoveController_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ActionDispatcher_GetActions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ActionDispatcherServer).GetActions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ActionDispatcher_GetActions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ActionDispatcherServer).GetActions(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ActionDispatcher_ServiceDesc is the grpc.ServiceDesc for ActionDispatcher service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -342,6 +375,10 @@ var ActionDispatcher_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveController",
 			Handler:    _ActionDispatcher_RemoveController_Handler,
+		},
+		{
+			MethodName: "GetActions",
+			Handler:    _ActionDispatcher_GetActions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

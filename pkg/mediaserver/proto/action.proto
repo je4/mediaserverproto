@@ -27,6 +27,10 @@ message ParamsParam {
   string action = 2;
 }
 
+message ActionDispatcherDefaultResponse {
+  genericproto.DefaultResponse response = 1;
+  int64 nextCallWait = 4;
+}
 
 message ActionResponse {
   oneof actionResponse {
@@ -42,4 +46,8 @@ message ActionDispatcherParam {
   uint32 port = 4;
   uint32 concurrency = 5;
   map <string, genericproto.StringList> actions = 6;
+}
+
+message ActionMap {
+  map<string, genericproto.StringList> actions = 1;
 }
