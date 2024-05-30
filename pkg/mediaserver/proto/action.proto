@@ -40,4 +40,5 @@ message ActionDispatcherParam {
   optional string host = 3;
   uint32 port = 4;
   uint32 concurrency = 5;
+  repeated string param = 6;
 }
