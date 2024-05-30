@@ -27,6 +27,7 @@ const (
 	Database_GetItemMetadata_FullMethodName = "/mediaserverproto.Database/GetItemMetadata"
 	Database_GetStorage_FullMethodName      = "/mediaserverproto.Database/GetStorage"
 	Database_GetCache_FullMethodName        = "/mediaserverproto.Database/GetCache"
+	Database_GetCaches_FullMethodName       = "/mediaserverproto.Database/GetCaches"
 	Database_DeleteCache_FullMethodName     = "/mediaserverproto.Database/DeleteCache"
 	Database_GetCollection_FullMethodName   = "/mediaserverproto.Database/GetCollection"
 	Database_GetCollections_FullMethodName  = "/mediaserverproto.Database/GetCollections"
@@ -47,6 +48,7 @@ type DatabaseClient interface {
 	GetItemMetadata(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error)
 	GetCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*Cache, error)
+	GetCaches(ctx context.Context, in *CachesRequest, opts ...grpc.CallOption) (*CachesResult, error)
 	DeleteCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	GetCollection(ctx context.Context, in *CollectionIdentifier, opts ...grpc.CallOption) (*Collection, error)
 	GetCollections(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (Database_GetCollectionsClient, error)
@@ -105,6 +107,15 @@ func (c *databaseClient) GetStorage(ctx context.Context, in *StorageIdentifier, 
 func (c *databaseClient) GetCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*Cache, error) {
 	out := new(Cache)
 	err := c.cc.Invoke(ctx, Database_GetCache_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) GetCaches(ctx context.Context, in *CachesRequest, opts ...grpc.CallOption) (*CachesResult, error) {
+	out := new(CachesResult)
+	err := c.cc.Invoke(ctx, Database_GetCaches_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -224,6 +235,7 @@ type DatabaseServer interface {
 	GetItemMetadata(context.Context, *ItemIdentifier) (*wrapperspb.StringValue, error)
 	GetStorage(context.Context, *StorageIdentifier) (*Storage, error)
 	GetCache(context.Context, *CacheRequest) (*Cache, error)
+	GetCaches(context.Context, *CachesRequest) (*CachesResult, error)
 	DeleteCache(context.Context, *CacheRequest) (*proto.DefaultResponse, error)
 	GetCollection(context.Context, *CollectionIdentifier) (*Collection, error)
 	GetCollections(*emptypb.Empty, Database_GetCollectionsServer) error
@@ -254,6 +266,9 @@ func (UnimplementedDatabaseServer) GetStorage(context.Context, *StorageIdentifie
 }
 func (UnimplementedDatabaseServer) GetCache(context.Context, *CacheRequest) (*Cache, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCache not implemented")
+}
+func (UnimplementedDatabaseServer) GetCaches(context.Context, *CachesRequest) (*CachesResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCaches not implemented")
 }
 func (UnimplementedDatabaseServer) DeleteCache(context.Context, *CacheRequest) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCache not implemented")
@@ -381,6 +396,24 @@ func _Database_GetCache_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DatabaseServer).GetCache(ctx, req.(*CacheRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Database_GetCaches_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CachesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DatabaseServer).GetCaches(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Database_GetCaches_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DatabaseServer).GetCaches(ctx, req.(*CachesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -576,6 +609,10 @@ var Database_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCache",
 			Handler:    _Database_GetCache_Handler,
+		},
+		{
+			MethodName: "GetCaches",
+			Handler:    _Database_GetCaches_Handler,
 		},
 		{
 			MethodName: "DeleteCache",

@@ -143,7 +143,7 @@ var file_rpcDatabase_proto_rawDesc = []byte{
 	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x66, 0x75, 0x6c, 0x6c, 0x4d, 0x65, 0x74, 0x61, 0x64,
 	0x61, 0x74, 0x61, 0x12, 0x19, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x06, 0x20, 0x01,
 	0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x88, 0x01, 0x01, 0x42, 0x08,
-	0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x32, 0xc5, 0x08, 0x0a, 0x08, 0x44, 0x61, 0x74,
+	0x0a, 0x06, 0x5f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x32, 0x95, 0x09, 0x0a, 0x08, 0x44, 0x61, 0x74,
 	0x61, 0x62, 0x61, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x04, 0x50, 0x69, 0x6e, 0x67, 0x12, 0x16, 0x2e,
 	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
 	0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x1d, 0x2e, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x69, 0x63, 0x70,
@@ -167,7 +167,12 @@ var file_rpcDatabase_proto_rawDesc = []byte{
 	0x2e, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x2e, 0x43, 0x61, 0x63, 0x68, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17,
 	0x2e, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x2e, 0x43, 0x61, 0x63, 0x68, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0b, 0x44, 0x65, 0x6c,
+	0x6f, 0x2e, 0x43, 0x61, 0x63, 0x68, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x09, 0x47, 0x65, 0x74,
+	0x43, 0x61, 0x63, 0x68, 0x65, 0x73, 0x12, 0x1f, 0x2e, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x73, 0x65,
+	0x72, 0x76, 0x65, 0x72, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x43, 0x61, 0x63, 0x68, 0x65, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x73,
+	0x65, 0x72, 0x76, 0x65, 0x72, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x43, 0x61, 0x63, 0x68, 0x65,
+	0x73, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0b, 0x44, 0x65, 0x6c,
 	0x65, 0x74, 0x65, 0x43, 0x61, 0x63, 0x68, 0x65, 0x12, 0x1e, 0x2e, 0x6d, 0x65, 0x64, 0x69, 0x61,
 	0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x43, 0x61, 0x63, 0x68,
 	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x67, 0x65, 0x6e, 0x65, 0x72,
@@ -245,15 +250,17 @@ var file_rpcDatabase_proto_goTypes = []interface{}{
 	(*emptypb.Empty)(nil),          // 4: google.protobuf.Empty
 	(*StorageIdentifier)(nil),      // 5: mediaserverproto.StorageIdentifier
 	(*CacheRequest)(nil),           // 6: mediaserverproto.CacheRequest
-	(*CollectionIdentifier)(nil),   // 7: mediaserverproto.CollectionIdentifier
-	(*NewItem)(nil),                // 8: mediaserverproto.NewItem
-	(*Cache)(nil),                  // 9: mediaserverproto.Cache
-	(*proto.DefaultResponse)(nil),  // 10: genericproto.DefaultResponse
-	(*Item)(nil),                   // 11: mediaserverproto.Item
-	(*wrapperspb.StringValue)(nil), // 12: google.protobuf.StringValue
-	(*Storage)(nil),                // 13: mediaserverproto.Storage
-	(*Collection)(nil),             // 14: mediaserverproto.Collection
-	(*IngestItem)(nil),             // 15: mediaserverproto.IngestItem
+	(*CachesRequest)(nil),          // 7: mediaserverproto.CachesRequest
+	(*CollectionIdentifier)(nil),   // 8: mediaserverproto.CollectionIdentifier
+	(*NewItem)(nil),                // 9: mediaserverproto.NewItem
+	(*Cache)(nil),                  // 10: mediaserverproto.Cache
+	(*proto.DefaultResponse)(nil),  // 11: genericproto.DefaultResponse
+	(*Item)(nil),                   // 12: mediaserverproto.Item
+	(*wrapperspb.StringValue)(nil), // 13: google.protobuf.StringValue
+	(*Storage)(nil),                // 14: mediaserverproto.Storage
+	(*CachesResult)(nil),           // 15: mediaserverproto.CachesResult
+	(*Collection)(nil),             // 16: mediaserverproto.Collection
+	(*IngestItem)(nil),             // 17: mediaserverproto.IngestItem
 }
 var file_rpcDatabase_proto_depIdxs = []int32{
 	1,  // 0: mediaserverproto.IngestMetadata.item:type_name -> mediaserverproto.ItemIdentifier
@@ -264,31 +271,33 @@ var file_rpcDatabase_proto_depIdxs = []int32{
 	1,  // 5: mediaserverproto.Database.GetItemMetadata:input_type -> mediaserverproto.ItemIdentifier
 	5,  // 6: mediaserverproto.Database.GetStorage:input_type -> mediaserverproto.StorageIdentifier
 	6,  // 7: mediaserverproto.Database.GetCache:input_type -> mediaserverproto.CacheRequest
-	6,  // 8: mediaserverproto.Database.DeleteCache:input_type -> mediaserverproto.CacheRequest
-	7,  // 9: mediaserverproto.Database.GetCollection:input_type -> mediaserverproto.CollectionIdentifier
-	4,  // 10: mediaserverproto.Database.GetCollections:input_type -> google.protobuf.Empty
-	8,  // 11: mediaserverproto.Database.CreateItem:input_type -> mediaserverproto.NewItem
-	1,  // 12: mediaserverproto.Database.DeleteItem:input_type -> mediaserverproto.ItemIdentifier
-	4,  // 13: mediaserverproto.Database.GetIngestItem:input_type -> google.protobuf.Empty
-	0,  // 14: mediaserverproto.Database.SetIngestItem:input_type -> mediaserverproto.IngestMetadata
-	1,  // 15: mediaserverproto.Database.ExistsItem:input_type -> mediaserverproto.ItemIdentifier
-	9,  // 16: mediaserverproto.Database.InsertCache:input_type -> mediaserverproto.Cache
-	10, // 17: mediaserverproto.Database.Ping:output_type -> genericproto.DefaultResponse
-	11, // 18: mediaserverproto.Database.GetItem:output_type -> mediaserverproto.Item
-	12, // 19: mediaserverproto.Database.GetItemMetadata:output_type -> google.protobuf.StringValue
-	13, // 20: mediaserverproto.Database.GetStorage:output_type -> mediaserverproto.Storage
-	9,  // 21: mediaserverproto.Database.GetCache:output_type -> mediaserverproto.Cache
-	10, // 22: mediaserverproto.Database.DeleteCache:output_type -> genericproto.DefaultResponse
-	14, // 23: mediaserverproto.Database.GetCollection:output_type -> mediaserverproto.Collection
-	14, // 24: mediaserverproto.Database.GetCollections:output_type -> mediaserverproto.Collection
-	10, // 25: mediaserverproto.Database.CreateItem:output_type -> genericproto.DefaultResponse
-	10, // 26: mediaserverproto.Database.DeleteItem:output_type -> genericproto.DefaultResponse
-	15, // 27: mediaserverproto.Database.GetIngestItem:output_type -> mediaserverproto.IngestItem
-	10, // 28: mediaserverproto.Database.SetIngestItem:output_type -> genericproto.DefaultResponse
-	10, // 29: mediaserverproto.Database.ExistsItem:output_type -> genericproto.DefaultResponse
-	10, // 30: mediaserverproto.Database.InsertCache:output_type -> genericproto.DefaultResponse
-	17, // [17:31] is the sub-list for method output_type
-	3,  // [3:17] is the sub-list for method input_type
+	7,  // 8: mediaserverproto.Database.GetCaches:input_type -> mediaserverproto.CachesRequest
+	6,  // 9: mediaserverproto.Database.DeleteCache:input_type -> mediaserverproto.CacheRequest
+	8,  // 10: mediaserverproto.Database.GetCollection:input_type -> mediaserverproto.CollectionIdentifier
+	4,  // 11: mediaserverproto.Database.GetCollections:input_type -> google.protobuf.Empty
+	9,  // 12: mediaserverproto.Database.CreateItem:input_type -> mediaserverproto.NewItem
+	1,  // 13: mediaserverproto.Database.DeleteItem:input_type -> mediaserverproto.ItemIdentifier
+	4,  // 14: mediaserverproto.Database.GetIngestItem:input_type -> google.protobuf.Empty
+	0,  // 15: mediaserverproto.Database.SetIngestItem:input_type -> mediaserverproto.IngestMetadata
+	1,  // 16: mediaserverproto.Database.ExistsItem:input_type -> mediaserverproto.ItemIdentifier
+	10, // 17: mediaserverproto.Database.InsertCache:input_type -> mediaserverproto.Cache
+	11, // 18: mediaserverproto.Database.Ping:output_type -> genericproto.DefaultResponse
+	12, // 19: mediaserverproto.Database.GetItem:output_type -> mediaserverproto.Item
+	13, // 20: mediaserverproto.Database.GetItemMetadata:output_type -> google.protobuf.StringValue
+	14, // 21: mediaserverproto.Database.GetStorage:output_type -> mediaserverproto.Storage
+	10, // 22: mediaserverproto.Database.GetCache:output_type -> mediaserverproto.Cache
+	15, // 23: mediaserverproto.Database.GetCaches:output_type -> mediaserverproto.CachesResult
+	11, // 24: mediaserverproto.Database.DeleteCache:output_type -> genericproto.DefaultResponse
+	16, // 25: mediaserverproto.Database.GetCollection:output_type -> mediaserverproto.Collection
+	16, // 26: mediaserverproto.Database.GetCollections:output_type -> mediaserverproto.Collection
+	11, // 27: mediaserverproto.Database.CreateItem:output_type -> genericproto.DefaultResponse
+	11, // 28: mediaserverproto.Database.DeleteItem:output_type -> genericproto.DefaultResponse
+	17, // 29: mediaserverproto.Database.GetIngestItem:output_type -> mediaserverproto.IngestItem
+	11, // 30: mediaserverproto.Database.SetIngestItem:output_type -> genericproto.DefaultResponse
+	11, // 31: mediaserverproto.Database.ExistsItem:output_type -> genericproto.DefaultResponse
+	11, // 32: mediaserverproto.Database.InsertCache:output_type -> genericproto.DefaultResponse
+	18, // [18:33] is the sub-list for method output_type
+	3,  // [3:18] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
 	3,  // [3:3] is the sub-list for extension extendee
 	0,  // [0:3] is the sub-list for field type_name
