@@ -13,6 +13,7 @@ import "defaultResponse.proto";
 import "item.proto";
 import "cache.proto";
 import "storage.proto";
+import "stringlist.proto";
 
 message ActionParam {
   Item item = 1;
@@ -36,9 +37,9 @@ message ActionResponse {
 
 message ActionDispatcherParam {
   string type = 1;
-  repeated string action = 2;
+  //repeated string action = 2;
   optional string host = 3;
   uint32 port = 4;
   uint32 concurrency = 5;
-  repeated string param = 6;
+  map <string, genericproto.StringList> actions = 6;
 }
