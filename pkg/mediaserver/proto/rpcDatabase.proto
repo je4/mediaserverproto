@@ -30,6 +30,7 @@ message IngestMetadata {
 service Database {
   rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
   rpc GetItem(ItemIdentifier) returns (Item) {}
+  rpc GetChildItems(ItemsRequest) returns (ItemsResult) {}
   rpc GetItemMetadata(ItemIdentifier) returns (google.protobuf.StringValue) {}
   rpc GetStorage(StorageIdentifier) returns (Storage) {}
   rpc GetCache(CacheRequest) returns (Cache) {}

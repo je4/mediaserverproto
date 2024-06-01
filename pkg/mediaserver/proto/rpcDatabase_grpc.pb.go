@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Database_Ping_FullMethodName            = "/mediaserverproto.Database/Ping"
 	Database_GetItem_FullMethodName         = "/mediaserverproto.Database/GetItem"
+	Database_GetChildItems_FullMethodName   = "/mediaserverproto.Database/GetChildItems"
 	Database_GetItemMetadata_FullMethodName = "/mediaserverproto.Database/GetItemMetadata"
 	Database_GetStorage_FullMethodName      = "/mediaserverproto.Database/GetStorage"
 	Database_GetCache_FullMethodName        = "/mediaserverproto.Database/GetCache"
@@ -45,6 +46,7 @@ const (
 type DatabaseClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	GetItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*Item, error)
+	GetChildItems(ctx context.Context, in *ItemsRequest, opts ...grpc.CallOption) (*ItemsResult, error)
 	GetItemMetadata(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error)
 	GetCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*Cache, error)
@@ -80,6 +82,15 @@ func (c *databaseClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...gr
 func (c *databaseClient) GetItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*Item, error) {
 	out := new(Item)
 	err := c.cc.Invoke(ctx, Database_GetItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) GetChildItems(ctx context.Context, in *ItemsRequest, opts ...grpc.CallOption) (*ItemsResult, error) {
+	out := new(ItemsResult)
+	err := c.cc.Invoke(ctx, Database_GetChildItems_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -232,6 +243,7 @@ func (c *databaseClient) InsertCache(ctx context.Context, in *Cache, opts ...grp
 type DatabaseServer interface {
 	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
 	GetItem(context.Context, *ItemIdentifier) (*Item, error)
+	GetChildItems(context.Context, *ItemsRequest) (*ItemsResult, error)
 	GetItemMetadata(context.Context, *ItemIdentifier) (*wrapperspb.StringValue, error)
 	GetStorage(context.Context, *StorageIdentifier) (*Storage, error)
 	GetCache(context.Context, *CacheRequest) (*Cache, error)
@@ -257,6 +269,9 @@ func (UnimplementedDatabaseServer) Ping(context.Context, *emptypb.Empty) (*proto
 }
 func (UnimplementedDatabaseServer) GetItem(context.Context, *ItemIdentifier) (*Item, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetItem not implemented")
+}
+func (UnimplementedDatabaseServer) GetChildItems(context.Context, *ItemsRequest) (*ItemsResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetChildItems not implemented")
 }
 func (UnimplementedDatabaseServer) GetItemMetadata(context.Context, *ItemIdentifier) (*wrapperspb.StringValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetItemMetadata not implemented")
@@ -342,6 +357,24 @@ func _Database_GetItem_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DatabaseServer).GetItem(ctx, req.(*ItemIdentifier))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Database_GetChildItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ItemsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DatabaseServer).GetChildItems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Database_GetChildItems_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DatabaseServer).GetChildItems(ctx, req.(*ItemsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -597,6 +630,10 @@ var Database_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetItem",
 			Handler:    _Database_GetItem_Handler,
+		},
+		{
+			MethodName: "GetChildItems",
+			Handler:    _Database_GetChildItems_Handler,
 		},
 		{
 			MethodName: "GetItemMetadata",

@@ -11,6 +11,7 @@ package mediaserverproto;
 
 import "google/protobuf/timestamp.proto";
 import "collection.proto";
+import "page.proto";
 
 message ItemIdentifier {
   string collection = 1;
@@ -55,8 +56,18 @@ message Item {
   google.protobuf.Timestamp updated = 5;
   bool disabled = 6;
   bool public = 7;
-  optional bytes publicActions = 8;
+  repeated string publicActions = 8;
   string status = 9;
   ItemMetadata metadata = 10;
   optional ItemIdentifier parent = 11;
+}
+
+message ItemsResult {
+  repeated Item items = 1;
+  genericproto.PageResponse pageResponse = 2;
+}
+
+message ItemsRequest {
+  ItemIdentifier identifier = 1;
+  genericproto.PageRequest pageRequest = 2;
 }
