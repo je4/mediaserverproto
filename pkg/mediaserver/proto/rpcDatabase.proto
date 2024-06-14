@@ -27,21 +27,35 @@ message IngestMetadata {
   optional string error = 6;
 }
 
+message DerivatIngestRequest {
+  repeated string suffix = 1;
+}
+
+message DerivatIngestResponse {
+  Item item = 1;
+  repeated string missing = 2;
+}
+
 service Database {
   rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
+
   rpc GetItem(ItemIdentifier) returns (Item) {}
   rpc GetChildItems(ItemsRequest) returns (ItemsResult) {}
   rpc GetItemMetadata(ItemIdentifier) returns (google.protobuf.StringValue) {}
-  rpc GetStorage(StorageIdentifier) returns (Storage) {}
-  rpc GetCache(CacheRequest) returns (Cache) {}
-  rpc GetCaches(CachesRequest) returns (CachesResult) {}
-  rpc DeleteCache(CacheRequest) returns (genericproto.DefaultResponse) {}
-  rpc GetCollection(CollectionIdentifier) returns (Collection) {}
-  rpc GetCollections(google.protobuf.Empty) returns (stream Collection) {}
   rpc CreateItem(NewItem) returns (genericproto.DefaultResponse) {}
   rpc DeleteItem(ItemIdentifier) returns (genericproto.DefaultResponse) {}
+  rpc GetDerivateIngestItem(DerivatIngestRequest) returns (DerivatIngestResponse) {}
   rpc GetIngestItem(google.protobuf.Empty) returns (IngestItem) {}
   rpc SetIngestItem(IngestMetadata) returns (genericproto.DefaultResponse) {}
   rpc ExistsItem(ItemIdentifier) returns (genericproto.DefaultResponse) {}
+
+  rpc GetCache(CacheRequest) returns (Cache) {}
+  rpc GetCaches(CachesRequest) returns (CachesResult) {}
+  rpc DeleteCache(CacheRequest) returns (genericproto.DefaultResponse) {}
   rpc InsertCache(Cache) returns (genericproto.DefaultResponse) {}
+
+  rpc GetStorage(StorageIdentifier) returns (Storage) {}
+
+  rpc GetCollection(CollectionIdentifier) returns (Collection) {}
+  rpc GetCollections(google.protobuf.Empty) returns (stream Collection) {}
 }

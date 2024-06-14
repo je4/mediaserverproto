@@ -22,22 +22,23 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Database_Ping_FullMethodName            = "/mediaserverproto.Database/Ping"
-	Database_GetItem_FullMethodName         = "/mediaserverproto.Database/GetItem"
-	Database_GetChildItems_FullMethodName   = "/mediaserverproto.Database/GetChildItems"
-	Database_GetItemMetadata_FullMethodName = "/mediaserverproto.Database/GetItemMetadata"
-	Database_GetStorage_FullMethodName      = "/mediaserverproto.Database/GetStorage"
-	Database_GetCache_FullMethodName        = "/mediaserverproto.Database/GetCache"
-	Database_GetCaches_FullMethodName       = "/mediaserverproto.Database/GetCaches"
-	Database_DeleteCache_FullMethodName     = "/mediaserverproto.Database/DeleteCache"
-	Database_GetCollection_FullMethodName   = "/mediaserverproto.Database/GetCollection"
-	Database_GetCollections_FullMethodName  = "/mediaserverproto.Database/GetCollections"
-	Database_CreateItem_FullMethodName      = "/mediaserverproto.Database/CreateItem"
-	Database_DeleteItem_FullMethodName      = "/mediaserverproto.Database/DeleteItem"
-	Database_GetIngestItem_FullMethodName   = "/mediaserverproto.Database/GetIngestItem"
-	Database_SetIngestItem_FullMethodName   = "/mediaserverproto.Database/SetIngestItem"
-	Database_ExistsItem_FullMethodName      = "/mediaserverproto.Database/ExistsItem"
-	Database_InsertCache_FullMethodName     = "/mediaserverproto.Database/InsertCache"
+	Database_Ping_FullMethodName                  = "/mediaserverproto.Database/Ping"
+	Database_GetItem_FullMethodName               = "/mediaserverproto.Database/GetItem"
+	Database_GetChildItems_FullMethodName         = "/mediaserverproto.Database/GetChildItems"
+	Database_GetItemMetadata_FullMethodName       = "/mediaserverproto.Database/GetItemMetadata"
+	Database_CreateItem_FullMethodName            = "/mediaserverproto.Database/CreateItem"
+	Database_DeleteItem_FullMethodName            = "/mediaserverproto.Database/DeleteItem"
+	Database_GetDerivateIngestItem_FullMethodName = "/mediaserverproto.Database/GetDerivateIngestItem"
+	Database_GetIngestItem_FullMethodName         = "/mediaserverproto.Database/GetIngestItem"
+	Database_SetIngestItem_FullMethodName         = "/mediaserverproto.Database/SetIngestItem"
+	Database_ExistsItem_FullMethodName            = "/mediaserverproto.Database/ExistsItem"
+	Database_GetCache_FullMethodName              = "/mediaserverproto.Database/GetCache"
+	Database_GetCaches_FullMethodName             = "/mediaserverproto.Database/GetCaches"
+	Database_DeleteCache_FullMethodName           = "/mediaserverproto.Database/DeleteCache"
+	Database_InsertCache_FullMethodName           = "/mediaserverproto.Database/InsertCache"
+	Database_GetStorage_FullMethodName            = "/mediaserverproto.Database/GetStorage"
+	Database_GetCollection_FullMethodName         = "/mediaserverproto.Database/GetCollection"
+	Database_GetCollections_FullMethodName        = "/mediaserverproto.Database/GetCollections"
 )
 
 // DatabaseClient is the client API for Database service.
@@ -48,18 +49,19 @@ type DatabaseClient interface {
 	GetItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*Item, error)
 	GetChildItems(ctx context.Context, in *ItemsRequest, opts ...grpc.CallOption) (*ItemsResult, error)
 	GetItemMetadata(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
-	GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error)
-	GetCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*Cache, error)
-	GetCaches(ctx context.Context, in *CachesRequest, opts ...grpc.CallOption) (*CachesResult, error)
-	DeleteCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
-	GetCollection(ctx context.Context, in *CollectionIdentifier, opts ...grpc.CallOption) (*Collection, error)
-	GetCollections(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (Database_GetCollectionsClient, error)
 	CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	DeleteItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
+	GetDerivateIngestItem(ctx context.Context, in *DerivatIngestRequest, opts ...grpc.CallOption) (*DerivatIngestResponse, error)
 	GetIngestItem(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IngestItem, error)
 	SetIngestItem(ctx context.Context, in *IngestMetadata, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	ExistsItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
+	GetCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*Cache, error)
+	GetCaches(ctx context.Context, in *CachesRequest, opts ...grpc.CallOption) (*CachesResult, error)
+	DeleteCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
 	InsertCache(ctx context.Context, in *Cache, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
+	GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error)
+	GetCollection(ctx context.Context, in *CollectionIdentifier, opts ...grpc.CallOption) (*Collection, error)
+	GetCollections(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (Database_GetCollectionsClient, error)
 }
 
 type databaseClient struct {
@@ -106,9 +108,54 @@ func (c *databaseClient) GetItemMetadata(ctx context.Context, in *ItemIdentifier
 	return out, nil
 }
 
-func (c *databaseClient) GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error) {
-	out := new(Storage)
-	err := c.cc.Invoke(ctx, Database_GetStorage_FullMethodName, in, out, opts...)
+func (c *databaseClient) CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
+	err := c.cc.Invoke(ctx, Database_CreateItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) DeleteItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
+	err := c.cc.Invoke(ctx, Database_DeleteItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) GetDerivateIngestItem(ctx context.Context, in *DerivatIngestRequest, opts ...grpc.CallOption) (*DerivatIngestResponse, error) {
+	out := new(DerivatIngestResponse)
+	err := c.cc.Invoke(ctx, Database_GetDerivateIngestItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) GetIngestItem(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IngestItem, error) {
+	out := new(IngestItem)
+	err := c.cc.Invoke(ctx, Database_GetIngestItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) SetIngestItem(ctx context.Context, in *IngestMetadata, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
+	err := c.cc.Invoke(ctx, Database_SetIngestItem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) ExistsItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
+	err := c.cc.Invoke(ctx, Database_ExistsItem_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,6 +183,24 @@ func (c *databaseClient) GetCaches(ctx context.Context, in *CachesRequest, opts 
 func (c *databaseClient) DeleteCache(ctx context.Context, in *CacheRequest, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
 	out := new(proto.DefaultResponse)
 	err := c.cc.Invoke(ctx, Database_DeleteCache_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) InsertCache(ctx context.Context, in *Cache, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
+	out := new(proto.DefaultResponse)
+	err := c.cc.Invoke(ctx, Database_InsertCache_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *databaseClient) GetStorage(ctx context.Context, in *StorageIdentifier, opts ...grpc.CallOption) (*Storage, error) {
+	out := new(Storage)
+	err := c.cc.Invoke(ctx, Database_GetStorage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -183,60 +248,6 @@ func (x *databaseGetCollectionsClient) Recv() (*Collection, error) {
 	return m, nil
 }
 
-func (c *databaseClient) CreateItem(ctx context.Context, in *NewItem, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
-	out := new(proto.DefaultResponse)
-	err := c.cc.Invoke(ctx, Database_CreateItem_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *databaseClient) DeleteItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
-	out := new(proto.DefaultResponse)
-	err := c.cc.Invoke(ctx, Database_DeleteItem_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *databaseClient) GetIngestItem(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*IngestItem, error) {
-	out := new(IngestItem)
-	err := c.cc.Invoke(ctx, Database_GetIngestItem_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *databaseClient) SetIngestItem(ctx context.Context, in *IngestMetadata, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
-	out := new(proto.DefaultResponse)
-	err := c.cc.Invoke(ctx, Database_SetIngestItem_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *databaseClient) ExistsItem(ctx context.Context, in *ItemIdentifier, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
-	out := new(proto.DefaultResponse)
-	err := c.cc.Invoke(ctx, Database_ExistsItem_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *databaseClient) InsertCache(ctx context.Context, in *Cache, opts ...grpc.CallOption) (*proto.DefaultResponse, error) {
-	out := new(proto.DefaultResponse)
-	err := c.cc.Invoke(ctx, Database_InsertCache_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // DatabaseServer is the server API for Database service.
 // All implementations must embed UnimplementedDatabaseServer
 // for forward compatibility
@@ -245,18 +256,19 @@ type DatabaseServer interface {
 	GetItem(context.Context, *ItemIdentifier) (*Item, error)
 	GetChildItems(context.Context, *ItemsRequest) (*ItemsResult, error)
 	GetItemMetadata(context.Context, *ItemIdentifier) (*wrapperspb.StringValue, error)
-	GetStorage(context.Context, *StorageIdentifier) (*Storage, error)
-	GetCache(context.Context, *CacheRequest) (*Cache, error)
-	GetCaches(context.Context, *CachesRequest) (*CachesResult, error)
-	DeleteCache(context.Context, *CacheRequest) (*proto.DefaultResponse, error)
-	GetCollection(context.Context, *CollectionIdentifier) (*Collection, error)
-	GetCollections(*emptypb.Empty, Database_GetCollectionsServer) error
 	CreateItem(context.Context, *NewItem) (*proto.DefaultResponse, error)
 	DeleteItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error)
+	GetDerivateIngestItem(context.Context, *DerivatIngestRequest) (*DerivatIngestResponse, error)
 	GetIngestItem(context.Context, *emptypb.Empty) (*IngestItem, error)
 	SetIngestItem(context.Context, *IngestMetadata) (*proto.DefaultResponse, error)
 	ExistsItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error)
+	GetCache(context.Context, *CacheRequest) (*Cache, error)
+	GetCaches(context.Context, *CachesRequest) (*CachesResult, error)
+	DeleteCache(context.Context, *CacheRequest) (*proto.DefaultResponse, error)
 	InsertCache(context.Context, *Cache) (*proto.DefaultResponse, error)
+	GetStorage(context.Context, *StorageIdentifier) (*Storage, error)
+	GetCollection(context.Context, *CollectionIdentifier) (*Collection, error)
+	GetCollections(*emptypb.Empty, Database_GetCollectionsServer) error
 	mustEmbedUnimplementedDatabaseServer()
 }
 
@@ -276,29 +288,14 @@ func (UnimplementedDatabaseServer) GetChildItems(context.Context, *ItemsRequest)
 func (UnimplementedDatabaseServer) GetItemMetadata(context.Context, *ItemIdentifier) (*wrapperspb.StringValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetItemMetadata not implemented")
 }
-func (UnimplementedDatabaseServer) GetStorage(context.Context, *StorageIdentifier) (*Storage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetStorage not implemented")
-}
-func (UnimplementedDatabaseServer) GetCache(context.Context, *CacheRequest) (*Cache, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCache not implemented")
-}
-func (UnimplementedDatabaseServer) GetCaches(context.Context, *CachesRequest) (*CachesResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCaches not implemented")
-}
-func (UnimplementedDatabaseServer) DeleteCache(context.Context, *CacheRequest) (*proto.DefaultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteCache not implemented")
-}
-func (UnimplementedDatabaseServer) GetCollection(context.Context, *CollectionIdentifier) (*Collection, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCollection not implemented")
-}
-func (UnimplementedDatabaseServer) GetCollections(*emptypb.Empty, Database_GetCollectionsServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetCollections not implemented")
-}
 func (UnimplementedDatabaseServer) CreateItem(context.Context, *NewItem) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateItem not implemented")
 }
 func (UnimplementedDatabaseServer) DeleteItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteItem not implemented")
+}
+func (UnimplementedDatabaseServer) GetDerivateIngestItem(context.Context, *DerivatIngestRequest) (*DerivatIngestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDerivateIngestItem not implemented")
 }
 func (UnimplementedDatabaseServer) GetIngestItem(context.Context, *emptypb.Empty) (*IngestItem, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetIngestItem not implemented")
@@ -309,8 +306,26 @@ func (UnimplementedDatabaseServer) SetIngestItem(context.Context, *IngestMetadat
 func (UnimplementedDatabaseServer) ExistsItem(context.Context, *ItemIdentifier) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExistsItem not implemented")
 }
+func (UnimplementedDatabaseServer) GetCache(context.Context, *CacheRequest) (*Cache, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCache not implemented")
+}
+func (UnimplementedDatabaseServer) GetCaches(context.Context, *CachesRequest) (*CachesResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCaches not implemented")
+}
+func (UnimplementedDatabaseServer) DeleteCache(context.Context, *CacheRequest) (*proto.DefaultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteCache not implemented")
+}
 func (UnimplementedDatabaseServer) InsertCache(context.Context, *Cache) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InsertCache not implemented")
+}
+func (UnimplementedDatabaseServer) GetStorage(context.Context, *StorageIdentifier) (*Storage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStorage not implemented")
+}
+func (UnimplementedDatabaseServer) GetCollection(context.Context, *CollectionIdentifier) (*Collection, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCollection not implemented")
+}
+func (UnimplementedDatabaseServer) GetCollections(*emptypb.Empty, Database_GetCollectionsServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetCollections not implemented")
 }
 func (UnimplementedDatabaseServer) mustEmbedUnimplementedDatabaseServer() {}
 
@@ -397,117 +412,6 @@ func _Database_GetItemMetadata_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Database_GetStorage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StorageIdentifier)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DatabaseServer).GetStorage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Database_GetStorage_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DatabaseServer).GetStorage(ctx, req.(*StorageIdentifier))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Database_GetCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CacheRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DatabaseServer).GetCache(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Database_GetCache_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DatabaseServer).GetCache(ctx, req.(*CacheRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Database_GetCaches_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CachesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DatabaseServer).GetCaches(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Database_GetCaches_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DatabaseServer).GetCaches(ctx, req.(*CachesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Database_DeleteCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CacheRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DatabaseServer).DeleteCache(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Database_DeleteCache_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DatabaseServer).DeleteCache(ctx, req.(*CacheRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Database_GetCollection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CollectionIdentifier)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DatabaseServer).GetCollection(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Database_GetCollection_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DatabaseServer).GetCollection(ctx, req.(*CollectionIdentifier))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Database_GetCollections_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(emptypb.Empty)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(DatabaseServer).GetCollections(m, &databaseGetCollectionsServer{stream})
-}
-
-type Database_GetCollectionsServer interface {
-	Send(*Collection) error
-	grpc.ServerStream
-}
-
-type databaseGetCollectionsServer struct {
-	grpc.ServerStream
-}
-
-func (x *databaseGetCollectionsServer) Send(m *Collection) error {
-	return x.ServerStream.SendMsg(m)
-}
-
 func _Database_CreateItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NewItem)
 	if err := dec(in); err != nil {
@@ -540,6 +444,24 @@ func _Database_DeleteItem_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DatabaseServer).DeleteItem(ctx, req.(*ItemIdentifier))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Database_GetDerivateIngestItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DerivatIngestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DatabaseServer).GetDerivateIngestItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Database_GetDerivateIngestItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DatabaseServer).GetDerivateIngestItem(ctx, req.(*DerivatIngestRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -598,6 +520,60 @@ func _Database_ExistsItem_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Database_GetCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CacheRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DatabaseServer).GetCache(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Database_GetCache_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DatabaseServer).GetCache(ctx, req.(*CacheRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Database_GetCaches_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CachesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DatabaseServer).GetCaches(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Database_GetCaches_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DatabaseServer).GetCaches(ctx, req.(*CachesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Database_DeleteCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CacheRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DatabaseServer).DeleteCache(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Database_DeleteCache_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DatabaseServer).DeleteCache(ctx, req.(*CacheRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Database_InsertCache_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Cache)
 	if err := dec(in); err != nil {
@@ -614,6 +590,63 @@ func _Database_InsertCache_Handler(srv interface{}, ctx context.Context, dec fun
 		return srv.(DatabaseServer).InsertCache(ctx, req.(*Cache))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _Database_GetStorage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StorageIdentifier)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DatabaseServer).GetStorage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Database_GetStorage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DatabaseServer).GetStorage(ctx, req.(*StorageIdentifier))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Database_GetCollection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CollectionIdentifier)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DatabaseServer).GetCollection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Database_GetCollection_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DatabaseServer).GetCollection(ctx, req.(*CollectionIdentifier))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Database_GetCollections_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(emptypb.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(DatabaseServer).GetCollections(m, &databaseGetCollectionsServer{stream})
+}
+
+type Database_GetCollectionsServer interface {
+	Send(*Collection) error
+	grpc.ServerStream
+}
+
+type databaseGetCollectionsServer struct {
+	grpc.ServerStream
+}
+
+func (x *databaseGetCollectionsServer) Send(m *Collection) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // Database_ServiceDesc is the grpc.ServiceDesc for Database service.
@@ -640,32 +673,16 @@ var Database_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Database_GetItemMetadata_Handler,
 		},
 		{
-			MethodName: "GetStorage",
-			Handler:    _Database_GetStorage_Handler,
-		},
-		{
-			MethodName: "GetCache",
-			Handler:    _Database_GetCache_Handler,
-		},
-		{
-			MethodName: "GetCaches",
-			Handler:    _Database_GetCaches_Handler,
-		},
-		{
-			MethodName: "DeleteCache",
-			Handler:    _Database_DeleteCache_Handler,
-		},
-		{
-			MethodName: "GetCollection",
-			Handler:    _Database_GetCollection_Handler,
-		},
-		{
 			MethodName: "CreateItem",
 			Handler:    _Database_CreateItem_Handler,
 		},
 		{
 			MethodName: "DeleteItem",
 			Handler:    _Database_DeleteItem_Handler,
+		},
+		{
+			MethodName: "GetDerivateIngestItem",
+			Handler:    _Database_GetDerivateIngestItem_Handler,
 		},
 		{
 			MethodName: "GetIngestItem",
@@ -680,8 +697,28 @@ var Database_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Database_ExistsItem_Handler,
 		},
 		{
+			MethodName: "GetCache",
+			Handler:    _Database_GetCache_Handler,
+		},
+		{
+			MethodName: "GetCaches",
+			Handler:    _Database_GetCaches_Handler,
+		},
+		{
+			MethodName: "DeleteCache",
+			Handler:    _Database_DeleteCache_Handler,
+		},
+		{
 			MethodName: "InsertCache",
 			Handler:    _Database_InsertCache_Handler,
+		},
+		{
+			MethodName: "GetStorage",
+			Handler:    _Database_GetStorage_Handler,
+		},
+		{
+			MethodName: "GetCollection",
+			Handler:    _Database_GetCollection_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
