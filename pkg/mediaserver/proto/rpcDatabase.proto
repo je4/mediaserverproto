@@ -28,7 +28,9 @@ message IngestMetadata {
 }
 
 message DerivatIngestRequest {
-  repeated string suffix = 1;
+  string type = 1;
+  string subtype = 2;
+  repeated string suffix = 3;
 }
 
 message DerivatIngestResponse {
