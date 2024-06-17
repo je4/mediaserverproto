@@ -15,6 +15,12 @@ import "cache.proto";
 import "storage.proto";
 import "stringlist.proto";
 
+enum ActionType {
+  OBJECT = 0;
+  TEMPLATE = 1;
+  EPHEMERAL = 2;
+}
+
 message ActionParam {
   Item item = 1;
   string action = 2;
@@ -50,4 +56,5 @@ message ActionDispatcherParam {
 
 message ActionMap {
   map<string, genericproto.StringList> actions = 1;
+  ActionType type = 2;
 }
