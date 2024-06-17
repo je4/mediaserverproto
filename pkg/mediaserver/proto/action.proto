@@ -54,7 +54,11 @@ message ActionDispatcherParam {
   map <string, genericproto.StringList> actions = 6;
 }
 
-message ActionMap {
-  map<string, genericproto.StringList> actions = 1;
+message ActionParamResponse {
+  repeated string params = 1;
   ActionType type = 2;
+}
+
+message ActionMap {
+  map<string, ActionParamResponse> actions = 1;
 }
