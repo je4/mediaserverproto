@@ -13,7 +13,6 @@ import "defaultResponse.proto";
 import "item.proto";
 import "cache.proto";
 import "storage.proto";
-import "stringlist.proto";
 
 enum ActionType {
   OBJECT = 0;
@@ -51,14 +50,14 @@ message ActionDispatcherParam {
   optional string host = 3;
   uint32 port = 4;
   uint32 concurrency = 5;
-  map <string, genericproto.StringList> actions = 6;
+  map <string, ActionParamDefinition> actions = 6;
 }
 
-message ActionParamResponse {
+message ActionParamDefinition {
   repeated string params = 1;
   ActionType type = 2;
 }
 
 message ActionMap {
-  map<string, ActionParamResponse> actions = 1;
+  map<string, ActionParamDefinition> actions = 1;
 }

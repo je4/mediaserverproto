@@ -16,7 +16,7 @@ import "google/protobuf/empty.proto";
 
 service Action {
   rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
-  rpc GetParams(ParamsParam) returns (ActionParamResponse) {}
+  rpc GetParams(ParamsParam) returns (ActionParamDefinition) {}
   rpc Action(ActionParam) returns (Cache) {}
 }
 
