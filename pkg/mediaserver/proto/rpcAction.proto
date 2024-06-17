@@ -10,14 +10,13 @@ option csharp_namespace = "Unibas.UB.Mediaserver";
 package mediaserverproto;
 
 import "defaultResponse.proto";
-import "stringlist.proto";
 import "action.proto";
 import "cache.proto";
 import "google/protobuf/empty.proto";
 
 service Action {
   rpc Ping(google.protobuf.Empty) returns (genericproto.DefaultResponse) {}
-  rpc GetParams(ParamsParam) returns (genericproto.StringList) {}
+  rpc GetParams(ParamsParam) returns (ActionParamDefinition) {}
   rpc Action(ActionParam) returns (Cache) {}
 }
 

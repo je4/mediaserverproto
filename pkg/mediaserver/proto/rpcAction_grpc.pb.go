@@ -31,7 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ActionClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*proto.DefaultResponse, error)
-	GetParams(ctx context.Context, in *ParamsParam, opts ...grpc.CallOption) (*proto.StringList, error)
+	GetParams(ctx context.Context, in *ParamsParam, opts ...grpc.CallOption) (*ActionParamDefinition, error)
 	Action(ctx context.Context, in *ActionParam, opts ...grpc.CallOption) (*Cache, error)
 }
 
@@ -52,8 +52,8 @@ func (c *actionClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc
 	return out, nil
 }
 
-func (c *actionClient) GetParams(ctx context.Context, in *ParamsParam, opts ...grpc.CallOption) (*proto.StringList, error) {
-	out := new(proto.StringList)
+func (c *actionClient) GetParams(ctx context.Context, in *ParamsParam, opts ...grpc.CallOption) (*ActionParamDefinition, error) {
+	out := new(ActionParamDefinition)
 	err := c.cc.Invoke(ctx, Action_GetParams_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (c *actionClient) Action(ctx context.Context, in *ActionParam, opts ...grpc
 // for forward compatibility
 type ActionServer interface {
 	Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error)
-	GetParams(context.Context, *ParamsParam) (*proto.StringList, error)
+	GetParams(context.Context, *ParamsParam) (*ActionParamDefinition, error)
 	Action(context.Context, *ActionParam) (*Cache, error)
 	mustEmbedUnimplementedActionServer()
 }
@@ -87,7 +87,7 @@ type UnimplementedActionServer struct {
 func (UnimplementedActionServer) Ping(context.Context, *emptypb.Empty) (*proto.DefaultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedActionServer) GetParams(context.Context, *ParamsParam) (*proto.StringList, error) {
+func (UnimplementedActionServer) GetParams(context.Context, *ParamsParam) (*ActionParamDefinition, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetParams not implemented")
 }
 func (UnimplementedActionServer) Action(context.Context, *ActionParam) (*Cache, error) {

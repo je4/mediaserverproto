@@ -12,7 +12,12 @@ package mediaserverproto;
 import "defaultResponse.proto";
 import "item.proto";
 import "storage.proto";
-import "stringlist.proto";
+
+enum ActionType {
+  OBJECT = 0;
+  TEMPLATE = 1;
+  EPHEMERAL = 2;
+}
 
 message ActionParam {
   Item item = 1;
@@ -37,9 +42,15 @@ message ActionDispatcherParam {
   optional string host = 3;
   uint32 port = 4;
   uint32 concurrency = 5;
-  map <string, genericproto.StringList> actions = 6;
+  map <string, ActionParamDefinition> actions = 6;
+}
+
+message ActionParamDefinition {
+  repeated string params = 1;
+  ActionType type = 2;
+  optional bytes data = 3;
 }
 
 message ActionMap {
-  map<string, genericproto.StringList> actions = 1;
+  map<string, ActionParamDefinition> actions = 1;
 }
