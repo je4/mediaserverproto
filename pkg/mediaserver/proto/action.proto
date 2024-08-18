@@ -33,7 +33,7 @@ message ActionDispatcherDefaultResponse {
 
 message ActionDispatcherParam {
   string type = 1;
-  repeated string domain = 2;
+  repeated string domains = 2;
   string name = 3;
   //uint32 port = 4;
   uint32 concurrency = 5;
