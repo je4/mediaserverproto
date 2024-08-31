@@ -36,13 +36,11 @@ message StringListMap {
 }
 
 message ActionDispatcherParam {
-  string type = 1;
-  repeated string domains = 2;
-  string name = 3;
-  //uint32 port = 4;
-  uint32 concurrency = 5;
-  map <string, StringListMap> actions = 6;
-  uint32 queueSize = 7;
+  repeated string domains = 1;
+  string name = 2;
+  uint32 concurrency = 3;
+  map <string, StringListMap> actions = 4;
+  uint32 queueSize = 5;
 }
 
 message ActionMap {
