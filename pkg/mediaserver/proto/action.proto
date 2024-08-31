@@ -31,13 +31,17 @@ message ActionDispatcherDefaultResponse {
   int64 nextCallWait = 4;
 }
 
+message StringListMap {
+  map<string, genericproto.StringList> values = 1;
+}
+
 message ActionDispatcherParam {
   string type = 1;
   repeated string domains = 2;
   string name = 3;
   //uint32 port = 4;
   uint32 concurrency = 5;
-  map <string, genericproto.StringList> actions = 6;
+  map <string, StringListMap> actions = 6;
   uint32 queueSize = 7;
 }
 
