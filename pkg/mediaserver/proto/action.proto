@@ -44,5 +44,5 @@ message ActionDispatcherParam {
 }
 
 message ActionMap {
-  map<string, genericproto.StringList> actions = 1;
+  map <string, StringListMap> actions = 1;
 }
